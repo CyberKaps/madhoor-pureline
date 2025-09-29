@@ -1,12 +1,15 @@
+"use client";
+
 import React from "react";
 import { Button } from "./ui/button";
+import { motion } from "framer-motion";
 
 const products = [
   {
     id: 1,
     title: "Groundnut oil (1 ltr)",
     price: "Rs.400",
-    image: "/assets/productImages/product1.jpeg", 
+    image: "/assets/productImages/product1.jpeg",
   },
   {
     id: 2,
@@ -25,40 +28,56 @@ const products = [
 export default function ShopSeasonProduce() {
   return (
     <section className="bg-[#d4e8c5] py-12 px-6 md:px-20">
-      <div className="flex justify-center">
-        <h2 className=" text-2xl md:text-3xl font-semibold text-[#1e3c36] mb-6 border-b border-[#1e3c36] inline-block pb-1">
-        {/* Shop Season's Produce */} Our Products
-      </h2>
-      </div>
+      {/* Heading */}
+      <motion.div
+        className="flex justify-center"
+        initial={{ opacity: 0, y: -30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        <h2 className="text-2xl md:text-3xl font-semibold text-[#1e3c36] mb-6 border-b border-[#1e3c36] inline-block pb-1">
+          Our Products
+        </h2>
+      </motion.div>
 
-      <div className="md:flex gap-12 justify-center mb-10">
-        {products.map((product) => (
-          <div key={product.id} className="max-w-xs group cursor-pointer relative">
-            
+      {/* Product Cards */}
+      <div className="md:flex gap-12 justify-center mb-10 flex-wrap">
+        {products.map((product, index) => (
+          <motion.div
+            key={product.id}
+            className="max-w-xs group cursor-pointer relative mb-8 transform transition duration-300 hover:scale-105"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.2, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
             <img
               src={product.image}
               alt={product.title}
-              className="w-fit h-64 object-cover rounded-"
+              className="w-full h-64 object-cover rounded-md"
             />
-
-            {/* Quick View overlay on hover */}
-            {/* <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-50 backdrop-blur-sm text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 py-2 text-sm text-gray-700">
-              Quick View
-            </div> */}
 
             <div className="mt-3 text-[#1e3c36]">
               <h3 className="text-base font-medium">{product.title}</h3>
               <p className="text-sm">{product.price}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="flex justify-center">
+      {/* CTA Button */}
+      <motion.div
+        className="flex justify-center"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }}
+        viewport={{ once: true }}
+      >
         <Button variant="brand" size="default" className="rounded-full px-6">
           Order Online
         </Button>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,5 +1,9 @@
+"use client"
+
 import { Button } from "./ui/button";
 import heroProducts from "../assets/HeroImg.png";
+import { WhyUs } from "./Whyus";
+import { motion } from "motion/react";
 
 const HeroSection = () => {
   return (
@@ -7,30 +11,30 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div className="space-y-8">
-            <h1 className="text-5xl lg:text-6xl font-bold text-[#825031] text-brand-green leading-tight">
-              Cold pressed,<br />
-              Groundnut Oil<br />
-              & Natural Jaggery
-            </h1>
-            
-            <p className="text-lg text-muted-foreground text-[#825031] leading-relaxed max-w-md">
-              At Pure Flav, we're dedicated to goodness in every sip. Delicious, fresh juice, just as nature intended.
-            </p>
-            
-            <Button variant="brand" size="lg" className="rounded-full px-8">
-              Shop
-            </Button>
-          </div>
-          
+          <motion.div
+            className="space-y-8"
+            initial={{ x: -80, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
+            <WhyUs />
+          </motion.div>
+
           {/* Right Content - Product Image */}
-          <div className="relative">
-            <img 
-              src={heroProducts.src} 
-              alt="Fresh green juice bottles with natural ingredients including lime, ginger, and leafy greens"
+          <motion.div
+            className="relative"
+            initial={{ x: 80, opacity: 0, scale: 0.95 }}
+            whileInView={{ x: 0, opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
+            <img
+              src={heroProducts.src}
+              alt="Fresh Groundnut Oil and Natural Jaggery"
               className="w-full h-auto object-cover rounded-lg"
             />
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
