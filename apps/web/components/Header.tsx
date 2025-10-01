@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
+import Link from "next/link";
 
 
 export default function Header() {
@@ -13,9 +14,9 @@ export default function Header() {
       <header className="w-full flex md:mr-14">
         {/* Left Logo Section */}
         <div className="bg-[#f57c3b] md:w-[25vw] flex flex-col justify-center px-6 py-4">
-          <h1 className="text-2xl font-bold text-[#243629] tracking-wide">
+          <Link href="/" className="text-2xl font-bold text-[#243629] tracking-wide">
             Madhoor Pureline
-          </h1>
+          </Link>
           <p className="text-sm text-[#243629]">The Pure Promise</p>
         </div>
 
@@ -23,18 +24,18 @@ export default function Header() {
         <div className="flex-1 bg-[#243629] flex items-center justify-between px-6">
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 text-white">
-            <a href="#shop" className="hover:text-[#f57c3b] transition-colors">
+            <Link href="/shop" className="hover:text-[#f57c3b] transition-colors">
               Shop
-            </a>
-            <a href="#subscription" className="hover:text-[#f57c3b] transition-colors">
+            </Link>
+            <Link href="/subscription" className="hover:text-[#f57c3b] transition-colors">
               Subscription
-            </a>
-            <a href="#about" className="hover:text-[#f57c3b] transition-colors">
+            </Link>
+            <Link href="/about" className="hover:text-[#f57c3b] transition-colors">
               About Us
-            </a>
-            <a href="#contact" className="hover:text-[#f57c3b] transition-colors">
+            </Link>
+            <Link href="/contact" className="hover:text-[#f57c3b] transition-colors">
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Actions (desktop) */}
@@ -83,10 +84,10 @@ export default function Header() {
             <X className="w-7 h-7" />
           </button>
 
-          <a href="#shop" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>Shop</a>
-          <a href="#subscription" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>Subscription</a>
-          <a href="#about" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>About Us</a>
-          <a href="#contact" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>Contact</a>
+          <Link href="/shop" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>Shop</Link>
+          <Link href="/subscription" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>Subscription</Link>
+          <Link href="/about" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>About Us</Link>
+          <Link href="/contact" className="text-xl hover:text-[#f57c3b]" onClick={() => setMobileOpen(false)}>Contact</Link>
 
           <button className="flex items-center text-[#f57c3b] hover:text-white" onClick={() => setMobileOpen(false)}>
             <User className="w-5 h-5 mr-2" /> Log In

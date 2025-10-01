@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "./ui/button";
 import heroProducts from "../assets/HeroImg.png";
 import { WhyUs } from "./Whyus";
 import { motion } from "motion/react";
