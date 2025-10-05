@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { prisma } from "@repo/db/client";
 import { comparePassword, createJWT, hashPassword } from '../utils/auth';
 
-
 export const signup = async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
 
@@ -12,8 +11,8 @@ export const signup = async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-     return res.status(400).json({ message: 'User already exists' });
-     }
+      return res.status(400).json({ success: false, message: 'User already exists' });
+    }
 
     const hashedPassword = await hashPassword(password);
 
@@ -25,12 +24,16 @@ export const signup = async (req: Request, res: Response) => {
       },
     });
 
-
     const token = createJWT(user);
-    res.status(201).json({ token });
+    res.status(201).json({
+      success: true,
+      token,
+      userId: user.id,  
+      user: { id: user.id, name: user.name, email: user.email },
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error during signup' });
+    res.status(500).json({ success: false, message: 'Server error during signup' });
   }
 };
 
@@ -43,19 +46,24 @@ export const login = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const isValid = await comparePassword(password, user.password);
 
     if (!isValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const token = createJWT(user);
-    res.status(200).json({ token });
+    res.status(200).json({
+      success: true,
+      token,
+      userId: user.id,  // 👈 send userId
+      user: { id: user.id, name: user.name, email: user.email },
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error during login' });
+    res.status(500).json({ success: false, message: 'Server error during login' });
   }
 };
