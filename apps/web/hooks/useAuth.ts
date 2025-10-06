@@ -2,9 +2,12 @@ import { logIn, signUp } from "lib/api";
 import { useState } from "react";
 
 
-type AuthResponse =
-  | { success: true; token: string; userId: string }
-  | { success: false; error: string };
+type AuthResponse = {
+  success: boolean;
+  token?: string;
+  userId?: string;
+  error?: string;
+};
 
 export function useAuth() {
   const [loading, setLoading] = useState(false);

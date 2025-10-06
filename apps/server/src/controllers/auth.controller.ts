@@ -59,11 +59,32 @@ export const login = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       token,
-      userId: user.id,  // 👈 send userId
+      userId: user.id,  
       user: { id: user.id, name: user.name, email: user.email },
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Server error during login' });
+  }
+};
+
+
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id; // comes from auth middleware
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true, email: true, createdAt: true },
+    });
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching user details' });
   }
 };

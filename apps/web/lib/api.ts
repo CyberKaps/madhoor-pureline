@@ -21,3 +21,8 @@ export async function logIn(email: string, password: string) {
 
   return { token, userId };
 }
+
+export async function getUserDetails() {
+  const res = await api.get("auth/me");
+  return res.data.user;
+}

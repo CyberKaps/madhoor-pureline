@@ -31,11 +31,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
   const onSubmit = async (data: any) => {
     if (isLogIn) {
       const res = await handleLogIn(data.email, data.password)
-      if (res.success) {
+
+
+      if (res.success && res.userId) {
         toast.success("Signed in successfully ✅")
         router.push(`/dashboard/${res.userId}`)
       } else {
-        toast.error(res.error)
+        toast.error(res.error || "Something went wrong")
       }
     } else {
       const res = await handleSignUp(data.name, data.email, data.password)
