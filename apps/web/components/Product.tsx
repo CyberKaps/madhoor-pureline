@@ -68,8 +68,8 @@ export default function ProductSection() {
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center gap-3 mt-auto">
-                  <Button variant="brand" size="sm" className="rounded-full px-6 bg-[#5a7c5e] hover:bg-[#4a6b50] text-white shadow-md font-bold">Add to Cart</Button>
+                <div className="flex items-center gap-20 mt-auto">
+                  <a href="https://wa.me/919423041414" target="_blank"><Button variant="brand" size="sm" className="rounded-full px-6 bg-[#5a7c5e] hover:bg-[#4a6b50] text-white shadow-md font-bold">Buy now</Button></a>
                   <span className="text-[#5a7c5e] font-extrabold text-xl tracking-tight">{product.price}</span>
                 </div>
               </div>

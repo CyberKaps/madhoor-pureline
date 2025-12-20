@@ -54,10 +54,10 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <button className="relative text-[#2d4a3e] hover:text-[#5a7c5e] transition-colors" aria-label="Cart">
+            {/* <button className="relative text-[#2d4a3e] hover:text-[#5a7c5e] transition-colors" aria-label="Cart">
               <ShoppingCart className="w-5 h-5" />
               <span className="absolute -top-2 -right-3 bg-[#7a9b5c] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-            </button>
+            </button> */}
           </div>
 
           <button
@@ -94,10 +94,10 @@ export default function Header() {
           <Link href="/about" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>About Us</Link>
           <Link href="/contact" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>Contact</Link>
 
-          <button className="relative text-[#7a9b5c] hover:text-white" onClick={() => setMobileOpen(false)} aria-label="Cart">
+          {/* <button className="relative text-[#7a9b5c] hover:text-white" onClick={() => setMobileOpen(false)} aria-label="Cart">
             <ShoppingCart className="w-6 h-6" />
             <span className="absolute -top-2 -right-3 bg-[#7a9b5c] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-          </button>
+          </button> */}
         </div>
       )}
     </>
