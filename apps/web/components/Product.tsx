@@ -1,132 +1,82 @@
+
 "use client";
 
-import React from "react";
+
+type PackOption = {
+  label: string;
+  price: string;
+};
+
+type Product = {
+  id: number;
+  title: string;
+  price: string;
+  image: string;
+  tags: string[];
+  highlight: string;
+  description: string;
+  packOptions?: PackOption[];
+};
+
+import { products } from "data/ProductsData";
+// Ensure products is typed as Product[]
+
+import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
 
-const products = [
-  {
-    id: 1,
-    title: "Groundnut oil (1 ltr)",
-    price: "Rs.400",
-    image: "/assets/productImages/product1.jpeg",
-  },
-  {
-    id: 2,
-    title: "Groundnut oil (5 ltr)",
-    price: "Rs.1400",
-    image: "/assets/productImages/product3.jpeg",
-  },
-  {
-    id: 3,
-    title: "Jaggery (1 kg)",
-    price: "Rs. 60",
-    image: "/assets/productImages/product2.jpeg",
-  },
-];
-
-export default function ShopSeasonProduce() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
-  
+export default function ProductSection() {
   return (
-    <section ref={ref} className="relative bg-gradient-to-b from-[#bdb298] to-[#c9c0a8] py-12 overflow-hidden">
-      {/* Heading */}
-      <motion.div
-        className="flex justify-center"
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-2xl md:text-3xl font-semibold text-[#1f3a2e] mb-6 border-b-2 border-[#5a7c5e] inline-block pb-1">
-          Our Products
-        </h2>
-      </motion.div>
+    <main className="bg-gradient-to-b from-[#dcd6c4] to-[#c9c0a8] min-h-screen text-[#1f3a2e]">
 
-      {/* Product Cards */}
-      <div className="container">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 mb-10">
-          {products.map((product, index) => (
+      <h3 className="text-5xl text-center p-10 font-extrabold text-[#1f3a2e]">Our Product's</h3>
+      {/* Product Cards Section */}
+      <section className="max-w-6xl mx-auto px-4 pb-20">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-12">
+          {(products as Product[]).map((product, idx) => (
             <motion.div
               key={product.id}
-              className="bg-[#e8e0cc] rounded-lg shadow-lg border-2 border-[#c9c0a8] overflow-hidden cursor-pointer"
-              initial={{ opacity: 0, y: 50, rotateX: -15 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: index * 0.12, 
-                ease: "easeOut"
-              }}
-              whileHover={{ 
-                scale: 1.05,
-                y: -10,
-                rotateY: 5,
-                transition: { duration: 0.3 }
-              }}
+              className="bg-gradient-to-br from-[#e8e0cc] to-[#c9c0a8] rounded-3xl shadow-2xl border border-[#c9c0a8] overflow-hidden flex flex-col hover:scale-105 hover:shadow-3xl transition-transform duration-300 group"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
               viewport={{ once: true }}
-              style={{ perspective: 1000 }}
             >
-              <div className="w-full h-56 bg-[#d4cdb7] overflow-hidden">
-                <motion.img
+              <div className="w-full aspect-[4/3] bg-[#fff] flex items-center justify-center overflow-hidden border-b border-[#c9c0a8] group-hover:bg-[#e8e0cc] transition-colors duration-300">
+                <img
                   src={product.image}
                   alt={product.title}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.4 }}
+                  className="w-full h-full object-cover rounded-2xl shadow-md group-hover:scale-105 transition-transform duration-500"
+                  style={{ objectPosition: 'center' }}
                 />
               </div>
-
-              <div className="p-4 text-[#1f3a2e]">
-                <h3 className="text-base font-semibold mb-1">{product.title}</h3>
-                <p className="text-sm font-medium text-[#4a6b50] mb-3">{product.price}</p>
-                <div className="flex items-center justify-between">
-                  <motion.button 
-                    className="bg-[#5a7c5e] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#4a6b50] transition shadow-md hover:shadow-lg"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Add to Cart
-                  </motion.button>
-                  <motion.span 
-                    className="text-xs text-[#4a6b50] font-medium flex items-center gap-1"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <motion.span 
-                      className="w-2 h-2 bg-[#5a7c5e] rounded-full"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    ></motion.span>
-                    In stock
-                  </motion.span>
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {product.tags && product.tags.map((tag, i) => (
+                    <span key={i} className="bg-[#c9c0a8] text-[#5a7c5e] px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide shadow-sm">{tag}</span>
+                  ))}
+                  {product.highlight && (
+                    <span className="bg-gradient-to-br from-[#5a7c5e] to-[#4a6b50] text-white px-2 py-0.5 rounded-full text-xs font-bold uppercase ml-auto shadow">{product.highlight}</span>
+                  )}
+                </div>
+                <h3 className="text-lg font-extrabold mb-1 leading-tight">{product.title}</h3>
+                <p className="text-[#4a6b50] text-sm mb-4 flex-1 font-medium leading-relaxed">{product.description}</p>
+                <div className="mb-4">
+                  {product.packOptions && product.packOptions.map((pack, i) => (
+                    <div key={i} className="flex items-center justify-between text-base mb-1">
+                      <span className="font-semibold text-[#1f3a2e]">{pack.label}</span>
+                      <span className="font-bold text-[#5a7c5e]">{pack.price}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center gap-3 mt-auto">
+                  <Button variant="brand" size="sm" className="rounded-full px-6 bg-[#5a7c5e] hover:bg-[#4a6b50] text-white shadow-md font-bold">Add to Cart</Button>
+                  <span className="text-[#5a7c5e] font-extrabold text-xl tracking-tight">{product.price}</span>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-      </div>
-
-      {/* CTA Button */}
-      <motion.div
-        className="flex justify-center"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }}
-        viewport={{ once: true }}
-        style={{ y }}
-      >
-        <Button variant="brand" size="lg" className="rounded-full px-8 bg-[#5a7c5e] hover:bg-[#4a6b50] text-white shadow-lg hover:shadow-2xl transition-all duration-300">
-          Order Online
-        </Button>
-      </motion.div>
-    </section>
+      </section>
+    </main>
   );
 }

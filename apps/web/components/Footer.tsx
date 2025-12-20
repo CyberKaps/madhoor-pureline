@@ -123,7 +123,7 @@ const Footer = () => {
       </div>
       <div className="border-t-2 border-[#5a7c5e] bg-[#1f3a2e] py-6">
           <p className="text-[#dcd6c4] text-sm text-center">
-            © 2025 Madhoor Pureline. All rights reserved. | Crafted with 🌿 by Kalpesh
+            © 2025 Madhoor Pureline. All rights reserved. | Devloped by Kalpesh - <a href="https://www.cyberkaps.me">Contact Me</a>
           </p>
         </div>
     </footer>
