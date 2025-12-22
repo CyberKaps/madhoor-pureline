@@ -28,9 +28,14 @@ export const createJWT = (user : UserPayload) => {
   }
 
   const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    secret,
-    { expiresIn: '1d' }
+    { 
+      id: user.id, 
+      email: user.email, 
+      role: user.role },
+      secret,{ 
+      expiresIn: '1d' 
+    }
   );
+
   return token;
 };

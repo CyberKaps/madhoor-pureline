@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from "@repo/db/client";
 import { comparePassword, createJWT, hashPassword } from '../utils/auth';
+import { redisClient } from '../utils/redisClient';
 
 export const signup = async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
@@ -25,11 +26,23 @@ export const signup = async (req: Request, res: Response) => {
     });
 
     const token = createJWT(user);
+
+    res.cookie("token", token, {
+      httpOnly: true, 
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000
+    } );
+
     res.status(201).json({
+      message: "Registered Successfully",
       success: true,
       token,
       userId: user.id,  
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { 
+        id: user.id, 
+        name: user.name, 
+        email: user.email 
+      },
     });
   } catch (error) {
     console.error(error);
@@ -62,6 +75,13 @@ export const login = async (req: Request, res: Response) => {
       userId: user.id,  
       user: { id: user.id, name: user.name, email: user.email },
     });
+
+    res.cookie("token", token, {
+      httpOnly: true, 
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000
+    } );
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Server error during login' });
@@ -71,7 +91,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // comes from auth middleware
+    const userId = req.user?.id; 
 
     if (!userId) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -88,3 +108,23 @@ export const getUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching user details' });
   }
 };
+
+
+export const logOutUser = async (req: Request, res: Response) => {
+
+    const token = req.cookies.token;
+
+    if(token) {
+        await redisClient.set(`blacklist:${token}`, 'true', 'EX', 24 * 60 * 60); 
+    }
+
+    res.clearCookie("token", { 
+        httpOnly: true, 
+        secure: true 
+    });
+
+    return res.status(200).json({
+        message: "Logged out successfully",
+    });
+
+}
