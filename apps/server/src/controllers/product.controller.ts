@@ -1,134 +1,208 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 import { prismaClient } from "@repo/db/client";
-import { Prisma } from '@prisma/client';
+import { Prisma } from "@prisma/client";
 
 
-// --- Public Access ---
-
-// GET /api/products
+// public controllers
+// Supports pagination + search
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = await prismaClient.product.findMany();
-    res.status(200).json({ data: products });
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.min(Number(req.query.limit) || 10, 50);
+    const search = req.query.search?.toString();
+
+    const where: Prisma.ProductWhereInput = search
+      ? {
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        }
+      : {};
+
+    const [products, total] = await Promise.all([
+      prismaClient.product.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+      }),
+      prismaClient.product.count({ where }),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      data: products,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error fetching products' });
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching products",
+    });
   }
 };
 
-// GET /api/products/:id
+
 export const getOneProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: 'Product ID is required in URL' });
-  }
-
-
   try {
+    const { id } = req.params;
+
     const product = await prismaClient.product.findUnique({
       where: { id },
     });
 
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
     }
 
-    res.status(200).json({ data: product });
+    return res.status(200).json({
+      success: true,
+      data: product,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error fetching product' });
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching product",
+    });
   }
 };
 
 
-// --- Admin Access ---
 
-// POST /api/products
+// admin controllers
 export const createProduct = async (req: Request, res: Response) => {
-  const { name, description, price, imageUrl } = req.body;
-
-  if (!name || !description || price === undefined) {
-    return res.status(400).json({ message: 'Missing required fields: name, description, price' });
-  }
-
   try {
+    const { name, description, price, imageUrl } = req.body;
+
+    if (!name || !description || price === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, description, and price are required",
+      });
+    }
+
+    const parsedPrice = Number(price);
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid price",
+      });
+    }
+
     const product = await prismaClient.product.create({
       data: {
         name,
         description,
-        price: parseFloat(price),
+        price: parsedPrice,
         imageUrl,
       },
     });
-    res.status(201).json({ data: product });
+
+    return res.status(201).json({
+      success: true,
+      data: product,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error creating product' });
+    return res.status(500).json({
+      success: false,
+      message: "Error creating product",
+    });
   }
 };
 
-// PUT /api/products/:id
+
 export const updateProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { name, description, price, imageUrl } = req.body;
-
-  if (!id) {
-    return res.status(400).json({ message: 'Product ID is required in URL' });
-  }
-
-   const updateData: {
-    name?: string;
-    description?: string;
-    price?: number;
-    imageUrl?: string;
-  } = {};
-
-  if (name !== undefined) updateData.name = name;
-  if (description !== undefined) updateData.description = description;
-  if (price !== undefined) updateData.price = parseFloat(price);
-  if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
-
-
   try {
+    const { id } = req.params;
+    const { name, description, price, imageUrl } = req.body;
+
+    const updateData: Prisma.ProductUpdateInput = {};
+
+    if (name !== undefined) updateData.name = name;
+    if (description !== undefined) updateData.description = description;
+    if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
+
+    if (price !== undefined) {
+      const parsedPrice = Number(price);
+      if (isNaN(parsedPrice) || parsedPrice < 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid price",
+        });
+      }
+      updateData.price = parsedPrice;
+    }
+
     const updatedProduct = await prismaClient.product.update({
       where: { id },
       data: updateData,
     });
-    res.status(200).json({ data: updatedProduct });
+
+    return res.status(200).json({
+      success: true,
+      data: updatedProduct,
+    });
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // Handle case where product to update is not found
-      if (error.code === 'P2025') {
-        return res.status(404).json({ message: 'Product not found' });
-      }
+
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
     }
-    res.status(500).json({ message: 'Error updating product' });
+
+    return res.status(500).json({
+      success: false,
+      message: "Error updating product",
+    });
   }
 };
 
-// DELETE /api/products/:id
+
 export const deleteProduct = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json({ message: 'Product ID is required in URL' });
-  }
-
   try {
+    const { id } = req.params;
+
     await prismaClient.product.delete({
       where: { id },
     });
-    res.status(200).json({ message: 'Product deleted successfully' });
+
+    return res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+    });
   } catch (error) {
     console.error(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // Handle case where product to delete is not found
-      if (error.code === 'P2025') {
-        return res.status(404).json({ message: 'Product not found' });
-      }
+
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
     }
-    res.status(500).json({ message: 'Error deleting product' });
+
+    return res.status(500).json({
+      success: false,
+      message: "Error deleting product",
+    });
   }
 };
