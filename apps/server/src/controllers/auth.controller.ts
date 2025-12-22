@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { prismaClient } from "@repo/db/client";
 import { comparePassword, createJWT, hashPassword } from '../utils/auth';
-import { redisClient } from '../utils/redisClient';
+import { redisClient } from '../lib/redisClient';
 
 export const signup = async (req: Request, res: Response) => {
   const { email, name, password } = req.body;

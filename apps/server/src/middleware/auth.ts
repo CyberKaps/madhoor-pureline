@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { redisClient } from "../utils/redisClient";
+import { redisClient } from "../lib/redisClient";
 
 export interface CustomUserPayload { 
   id: string;
@@ -52,7 +52,7 @@ export const protect = async (
     req.user = decoded;
 
     next();
-    
+
   } catch (e) {
     console.error(e);
     return res.status(401).json({
