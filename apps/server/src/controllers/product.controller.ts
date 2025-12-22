@@ -7,38 +7,13 @@ import { Prisma } from "@prisma/client";
 // Supports pagination + search
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const page = Math.max(Number(req.query.page) || 1, 1);
-    const limit = Math.min(Number(req.query.limit) || 10, 50);
-    const search = req.query.search?.toString();
-
-    const where: Prisma.ProductWhereInput = search
-      ? {
-          OR: [
-            { name: { contains: search, mode: "insensitive" } },
-            { description: { contains: search, mode: "insensitive" } },
-          ],
-        }
-      : {};
-
-    const [products, total] = await Promise.all([
-      prismaClient.product.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: { createdAt: "desc" },
-      }),
-      prismaClient.product.count({ where }),
-    ]);
+    const products = await prismaClient.product.findMany({
+      orderBy: { createdAt: "desc" },
+    });
 
     return res.status(200).json({
       success: true,
       data: products,
-      meta: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
     });
   } catch (error) {
     console.error(error);
