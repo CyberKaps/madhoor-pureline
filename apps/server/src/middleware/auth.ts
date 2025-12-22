@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 
-interface CustomUserPayload {
+export interface CustomUserPayload {
   id: string;
   email: string;
   role: 'USER' | 'ADMIN';

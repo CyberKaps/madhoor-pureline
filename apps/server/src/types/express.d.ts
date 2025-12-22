@@ -1,7 +1,7 @@
 // To extend the Express Request interface
 declare namespace Express {
     export interface Request {
-      user?: {
+      user: {
         id: string;
         email: string;
         role: 'USER' | 'ADMIN';

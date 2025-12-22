@@ -10,7 +10,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL")
 }
 
 model User {
@@ -52,6 +51,8 @@ model Cart {
 
   items CartItem[]
 
+  @@index([userId])
+
   @@map("carts")
 }
 
@@ -66,6 +67,8 @@ model CartItem {
 
   cartId String
   cart   Cart   @relation(fields: [cartId], references: [id])
+
+  @@unique([productId, cartId])
 
   @@map("cart_items")
 }
@@ -85,13 +88,15 @@ model Order {
 
   items OrderItem[]
 
+  @@index([userId])
+
   @@map("orders")
 }
 
 model OrderItem {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  quantity  Int
+  quantity  Int @default(1)
   price     Float // Price of the product at the time of order
 
   productId String
