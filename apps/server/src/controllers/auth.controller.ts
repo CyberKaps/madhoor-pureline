@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { prisma } from "@repo/db/client";
+import { prismaClient } from "@repo/db/client";
 import { comparePassword, createJWT, hashPassword } from '../utils/auth';
 import { redisClient } from '../utils/redisClient';
 
@@ -7,7 +7,7 @@ export const signup = async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
 
   try {
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prismaClient.user.findUnique({
       where: { email },
     });
 
@@ -17,7 +17,7 @@ export const signup = async (req: Request, res: Response) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await prisma.user.create({
+    const user = await prismaClient.user.create({
       data: {
         email,
         name,
@@ -54,7 +54,7 @@ export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: { email },
     });
 
@@ -97,7 +97,7 @@ export const getUser = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: { id: userId },
       select: { id: true, name: true, email: true, createdAt: true },
     });

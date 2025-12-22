@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { prisma, PrismaInstance  } from "@repo/db/client";
+import { prismaClient } from "@repo/db/client";
+import { Prisma } from '@prisma/client';
 
 
 // --- Public Access ---
@@ -7,7 +8,7 @@ import { prisma, PrismaInstance  } from "@repo/db/client";
 // GET /api/products
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const products = await prisma.product.findMany();
+    const products = await prismaClient.product.findMany();
     res.status(200).json({ data: products });
   } catch (error) {
     console.error(error);
@@ -25,7 +26,7 @@ export const getOneProduct = async (req: Request, res: Response) => {
 
 
   try {
-    const product = await prisma.product.findUnique({
+    const product = await prismaClient.product.findUnique({
       where: { id },
     });
 
@@ -52,7 +53,7 @@ export const createProduct = async (req: Request, res: Response) => {
   }
 
   try {
-    const product = await prisma.product.create({
+    const product = await prismaClient.product.create({
       data: {
         name,
         description,
@@ -90,14 +91,14 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 
   try {
-    const updatedProduct = await prisma.product.update({
+    const updatedProduct = await prismaClient.product.update({
       where: { id },
       data: updateData,
     });
     res.status(200).json({ data: updatedProduct });
   } catch (error) {
     console.error(error);
-    if (error instanceof PrismaInstance.PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle case where product to update is not found
       if (error.code === 'P2025') {
         return res.status(404).json({ message: 'Product not found' });
@@ -116,13 +117,13 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
 
   try {
-    await prisma.product.delete({
+    await prismaClient.product.delete({
       where: { id },
     });
     res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error(error);
-    if (error instanceof PrismaInstance.PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       // Handle case where product to delete is not found
       if (error.code === 'P2025') {
         return res.status(404).json({ message: 'Product not found' });

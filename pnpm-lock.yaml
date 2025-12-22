@@ -20,6 +20,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@prisma/client':
+        specifier: 7.2.0
+        version: 7.2.0(prisma@7.2.0(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.9.2))(typescript@5.9.2)
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
