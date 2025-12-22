@@ -33,7 +33,7 @@ export const getCart = async (req: Request, res: Response) => {
         });
 
     } catch(e) {
-        console.log(e)
+        console.error(e)
         return res.status(500).json({
             success: false,
             message: "Error",
@@ -96,7 +96,7 @@ export const addToCart = async (req: Request, res: Response) => {
 
 
     } catch(e) {
-        console.log(e);
+        console.error(e);
         return res.status(500).json({
             success: false,
             error: typeof e === "object" && e !== null && "message" in e ? (e as any).message : String(e)
@@ -161,7 +161,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
 
 
     } catch(e) {
-        console.log(e)
+        console.error(e)
         if( e instanceof CartNotFoundError) {
             return res.status(404).json({
             success: false,
@@ -221,7 +221,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
         });
 
     } catch(e) {
-        console.log(e);
+        console.error(e);
 
         // Cart not found
         if (e instanceof CartNotFoundError) {
@@ -281,7 +281,7 @@ export const clearCart = async (req: Request, res: Response) => {
         });
 
     } catch(e) {
-        console.log(e);
+        console.error(e);
         return res.status(500).json({
             success: false,
             error:

@@ -5,11 +5,11 @@ import { addToCart, clearCart, getCart, removeFromCart, updateCartItem } from '.
 
 const cartRoutes: Router = Router();
 
-cartRoutes.post('/getCart',protect, getCart);
+cartRoutes.get('/',protect, getCart);
 cartRoutes.post('/add',protect, addToCart);
-cartRoutes.put('/item/:itemId', protect, updateCartItem);
-cartRoutes.delete('/item/:itemId', removeFromCart);
-cartRoutes.delete('', clearCart);
+cartRoutes.put('/item', protect, updateCartItem);
+cartRoutes.delete('/item/:productId', protect, removeFromCart);
+cartRoutes.delete('/', protect, clearCart);
 
 
 export default cartRoutes;
