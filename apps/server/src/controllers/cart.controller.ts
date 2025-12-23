@@ -1,23 +1,15 @@
 import { Request, Response } from 'express';
 import { prismaClient } from "@repo/db/client";
-import { CartNotFoundError, getCartOrThrow } from '../services/cart.service';
+import { CartNotFoundError, getCartOrThrow, getCartWithItems, getOrCreateCart } from '../services/cart.service';
 import { Prisma } from "@prisma/client"
 
 export const getCart = async (req: Request, res: Response) => {
     try {
 
         const userId = req.user.id;
+        
 
-        const cart = await prismaClient.cart.findUnique({
-            where: {userId},
-            include: {
-                items: {
-                    include: {
-                        product: true
-                    },
-                },
-            },
-        });
+        const cart = getCartWithItems(userId);
 
         if(!cart) {
             return res.status(200).json({
@@ -58,15 +50,7 @@ export const addToCart = async (req: Request, res: Response) => {
          }
 
         // Ensure cart exists
-        let cart = await prismaClient.cart.findUnique({
-            where: { userId },
-        });
-
-        if(!cart) {
-            cart = await prismaClient.cart.create({
-            data: { userId },
-        });
-        }
+        const cart = await getOrCreateCart(userId);
 
 
         // Add or update the product in the cart using UPSERT
