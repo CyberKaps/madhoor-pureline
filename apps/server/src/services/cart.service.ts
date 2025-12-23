@@ -8,10 +8,17 @@ export async function getCartOrThrow(userId: string) {
 
   const cart = await prismaClient.cart.findUnique({
     where: { userId },
+    include: {
+      items: {
+        include: {
+          product: true
+        },
+      },
+    },
   });
 
   if (!cart) {
-    throw new Error("Cart not found");
+    throw new CartNotFoundError("Cart not found");
   }
 
   return cart;

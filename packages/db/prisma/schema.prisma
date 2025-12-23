@@ -73,13 +73,25 @@ model CartItem {
   @@map("cart_items")
 }
 
+model shippingAddress {
+
+  id          String           @id @default(cuid())
+  street      String           
+  city        String    
+  pincode     Int
+
+  order       Order[]           
+
+}
+
 model Order {
   id               String       @id @default(cuid())
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
   totalAmount      Float
   status           OrderStatus  @default(PENDING)
-  shippingAddress  String
+  shippingAddressId String
+  shippingAddress  shippingAddress @relation(fields: [shippingAddressId], references: [id])
   paymentId        String?      @unique // From Razorpay
   paymentMode      String       @default("COD")
 
