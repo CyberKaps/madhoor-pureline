@@ -94,6 +94,7 @@ model Order {
   shippingAddress  shippingAddress @relation(fields: [shippingAddressId], references: [id])
   paymentId        String?      @unique // From Razorpay
   paymentMode      String       @default("COD")
+  razorpayOrderId  String?       @unique
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

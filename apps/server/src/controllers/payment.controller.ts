@@ -44,6 +44,15 @@ export const createRazorpayOrder = async (req: Request, res: Response) => {
             receipt: order.id,
         });
 
+        // save razorpay order id
+        await prismaClient.order.update({
+            where: { id: order.id },
+            data: {
+                razorpayOrderId: razorpayOrder.id
+            }
+        })
+
+
         return res.status(200).json({
             success: true,
             razorpayOrderId: razorpayOrder.id,
