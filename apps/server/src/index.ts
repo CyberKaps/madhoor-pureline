@@ -7,6 +7,7 @@ import productRoutes from './routes/product.route';
 import cartRoutes from './routes/cart.route';
 import paymentRoutes from './routes/payment.route';
 import orderRoutes from './routes/order.route';
+import adminOrderRoutes from './routes/admin.order.route';
 
 
 // Load environment variables
@@ -31,7 +32,7 @@ app.use('/api/product', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/payment', paymentRoutes);
-
+app.use('/api/admin', adminOrderRoutes);
 
 
 app.listen(PORT, () => {
