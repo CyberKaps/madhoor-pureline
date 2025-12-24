@@ -131,7 +131,7 @@ export const getOrders = async (req: Request, res: Response) => {
 export const getOrderById = async (req: Request, res: Response) => {
     try {
         const userId =  req.user.id;   
-        const id = req.params;
+        const { id } = req.params;
 
         const order = await prismaClient.order.findFirst({
             where: {
@@ -170,4 +170,3 @@ export const getOrderById = async (req: Request, res: Response) => {
         });
     }
 }
-
