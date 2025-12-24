@@ -170,3 +170,45 @@ export const getOrderById = async (req: Request, res: Response) => {
         });
     }
 }
+
+
+export const cancelOrder = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user.id;
+        const { id } = req.params;
+
+        const order = await prismaClient.order.findFirst({
+             where: { id, userId },
+        });
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found",
+            });
+        }
+
+        if (order.status !== "PENDING") {
+            return res.status(400).json({
+                success: false,
+                message: "Only pending orders can be cancelled",
+            });
+        }
+
+        await prismaClient.order.update({
+            where: { id },
+            data: { status: "CANCELLED" },
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Order cancelled successfully",
+        });
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to cancel order",
+        });
+    }
+};
