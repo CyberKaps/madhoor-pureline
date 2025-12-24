@@ -133,3 +133,10 @@ enum OrderStatus {
   DELIVERED
   CANCELLED
 }
+
+model WebhookLog {
+  id        String   @id @default(cuid())
+  event     String
+  payload   Json
+  createdAt DateTime @default(now())
+}

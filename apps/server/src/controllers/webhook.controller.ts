@@ -20,14 +20,32 @@ export const razorpayWebhook = async (req: Request, res: Response) => {
     // Parse webhook payload
     const event = JSON.parse(req.body.toString());
 
+    // Log webhook
+    await prismaClient.webhookLog.create({
+      data: {
+        event: event.event,
+        payload: event,
+      },
+    });
+
     // Handle successful payment
     if (event.event === "payment.captured") {
       const payment = event.payload.payment.entity;
 
-      await prismaClient.order.updateMany({
+      const order = await prismaClient.order.findFirst({
         where: {
           razorpayOrderId: payment.order_id,
-          status: "PENDING",
+        },
+      });
+
+      // Idempotency check
+      if (!order || order.status !== "PENDING") {
+        return res.status(200).json({ ignored: true });
+      }
+
+      await prismaClient.order.update({
+        where: {
+          id: order.id
         },
         data: {
           status: "PAID",
