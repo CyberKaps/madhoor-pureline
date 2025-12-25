@@ -5,25 +5,42 @@ import { OrderStatus } from "@prisma/client";
 
 export const getAllOrders = async (req: Request, res: Response) => {
     try {
-        const orders = await prismaClient.order.findMany({
-            orderBy: { createdAt: 'desc'},
+        const page = Math.max(Number(req.query.page) || 1, 1);
+        const limit = Math.min(Number(req.query.limit) || 10, 50);
+        const status = req.query.status as OrderStatus | undefined;
+
+        const where: any = {};
+        if (status) where.status = status;
+
+        const [orders, total] = await Promise.all([
+        prismaClient.order.findMany({
+            where,
+            skip: (page - 1) * limit,
+            take: limit,
+            orderBy: { createdAt: "desc" },
             include: {
                 user: {
-                    select: { id: true, name: true, email: true},
+                    select: { id: true, name: true, email: true },
                 },
                 items: {
-                    include: {
-                        product: true
-                    }
+                    include: { product: true },
                 },
-                shippingAddress: true
-            }
-        });
+                shippingAddress: true,
+            },
+        }),
+        prismaClient.order.count({ where }),
+        ]);
 
         return res.status(200).json({
-            success: true,
-            data: orders
-        })
+        success: true,
+        data: orders,
+        meta: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+        },
+        });
 
     } catch(e) {
         console.log(e);
