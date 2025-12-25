@@ -103,3 +103,45 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const adminAnalytics = async (req: Request, res: Response ) => {
+    try {
+
+        const [ totalOrders, paidOrders, revenue, statusCounts, recentOrders ] = await Promise.all([
+            prismaClient.order.count(),
+            prismaClient.order.count({ where: { status: "PAID"}}),
+            prismaClient.order.aggregate({
+                _sum: { totalAmount: true},
+                where: { status: "PAID"}
+            }),
+            prismaClient.order.groupBy({
+                by: ["status"],
+                _count: true
+
+            }),
+            prismaClient.order.findMany({
+                take: 5,
+                orderBy: {createdAt: 'desc'},
+                include: { user: true}
+            })
+        ])
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                totalOrders,
+                paidOrders,
+                totalRevenue: revenue._sum.totalAmount ?? 0,
+                orderStatusBreakdown: statusCounts,
+                recentOrders,
+            },
+        });
+
+    } catch(e) {
+        console.log(e);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch analytics",
+        });
+    }
+}

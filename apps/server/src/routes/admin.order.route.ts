@@ -1,11 +1,12 @@
 
 import { Router } from "express";
 import { protect, isAdmin } from "../middleware/auth";
-import { getAllOrders, updateOrderStatus } from "../controllers/admin.order.controller";
+import { adminAnalytics, getAllOrders, updateOrderStatus } from "../controllers/admin.controller";
 
-const adminOrderRoutes: Router = Router();
+const adminRoutes: Router = Router();
 
-adminOrderRoutes.get("/orders", protect, isAdmin, getAllOrders);
-adminOrderRoutes.patch("/orders/:id/status", protect, isAdmin, updateOrderStatus);
+adminRoutes.get("/orders", protect, isAdmin, getAllOrders);
+adminRoutes.patch("/orders/:id/status", protect, isAdmin, updateOrderStatus);
+adminRoutes.get("/analytics", protect, isAdmin, adminAnalytics);
 
-export default adminOrderRoutes;
+export default adminRoutes;
