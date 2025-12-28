@@ -34,7 +34,7 @@ export default function Header() {
           <nav className="hidden md:flex sm:gap-6 items-center space-x-8 text-[#1f3a2e] font-medium">
             {[
               { label: "Home", href: "/" },
-              { label: "Shop", href: "/shop" },
+              { label: "Products", href: "/products" },
               { label: "About Us", href: "/about" },
               { label: "Reviews", href: "/reviews" },
               { label: "Contact", href: "/contact" }
@@ -65,7 +65,7 @@ export default function Header() {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileOpen ? "" : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </motion.header>
@@ -80,7 +80,7 @@ export default function Header() {
 
       {/* Mobile Overlay */}
       {mobileOpen && (
-        <div className="absolute top-0 left-0 w-full h-screen bg-[#2d4a3e] text-[#f5f3ed] flex flex-col items-center justify-center space-y-8 z-[60]">
+        <div className="absolute top- left-0 w-full h- bg-[#dcd6c4] text-[#1f3a2e] flex flex-col items-center justify-center space-y-4 z-[60]">
           <button
             className="absolute top-6 right-6 text-[#7a9b5c]"
             onClick={() => setMobileOpen(false)}
@@ -89,7 +89,8 @@ export default function Header() {
             <X className="w-7 h-7" />
           </button>
 
-          <Link href="/shop" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>Shop</Link>
+          <Link href="/" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>Home</Link>
+          <Link href="/products" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>Products</Link>
           <Link href="/subscription" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>Subscription</Link>
           <Link href="/about" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>About Us</Link>
           <Link href="/contact" className="text-xl hover:text-[#7a9b5c]" onClick={() => setMobileOpen(false)}>Contact</Link>
