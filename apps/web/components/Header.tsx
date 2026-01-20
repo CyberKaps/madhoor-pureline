@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from "framer-motion";
 import CartDrawer from "./CartDrawer";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
@@ -21,11 +21,14 @@ export default function Header() {
   const { scrollY } = useScroll();
   const pathname = usePathname();
 
+  // Pages with dark hero sections where header text should be white initially
+  const isDarkHero = ["/", "/products", "/about", "/reviews"].includes(pathname);
+
   // Dynamic header styles based on scroll
   const headerBackground = useTransform(
     scrollY,
     [0, 50],
-    ["rgba(220, 214, 196, 0)", "rgba(255, 255, 255, 0.8)"]
+    ["rgba(220, 214, 196, 0)", "rgba(255, 255, 255, 0.95)"]
   );
   const headerBackdropBlur = useTransform(scrollY, [0, 50], ["0px", "12px"]);
   const headerBorder = useTransform(
@@ -39,6 +42,15 @@ export default function Header() {
     ["0px 0px 0px rgba(0,0,0,0)", "0px 4px 20px rgba(0,0,0,0.05)"]
   );
   const paddingY = useTransform(scrollY, [0, 50], ["20px", "12px"]);
+
+  // Text Color Transformation
+  // If Dark Hero: White -> Dark Green
+  // If Light Hero: Dark Green -> Dark Green
+  const textColor = useTransform(
+    scrollY,
+    [0, 50],
+    [isDarkHero ? "rgba(255, 255, 255, 1)" : "rgba(31, 58, 46, 1)", "rgba(31, 58, 46, 1)"]
+  );
 
   return (
     <>
@@ -67,9 +79,12 @@ export default function Header() {
               />
             </motion.div>
             <div className="flex flex-col">
-              <span className="text-xl font-serif font-bold text-[#1f3a2e] tracking-wide leading-none group-hover:text-[#5a7c5e] transition-colors">
+              <motion.span
+                style={{ color: textColor }}
+                className="text-xl font-serif font-bold tracking-wide leading-none transition-colors"
+              >
                 Madhoor
-              </span>
+              </motion.span>
               <span className="text-[10px] text-[#5a7c5e] uppercase tracking-[0.2em] font-medium">
                 Pureline
               </span>
@@ -84,12 +99,18 @@ export default function Header() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={cn(
-                    "relative text-sm font-medium transition-colors hover:text-[#5a7c5e]",
-                    isActive ? "text-[#5a7c5e]" : "text-[#2d4a3e]"
-                  )}
+                  className="relative group"
                 >
-                  {item.label}
+                  <motion.span
+                    style={{ color: textColor }}
+                    className={cn(
+                      "text-sm font-medium transition-colors group-hover:opacity-80",
+                      isActive ? "font-bold" : ""
+                    )}
+                  >
+                    {item.label}
+                  </motion.span>
+
                   {isActive && (
                     <motion.div
                       layoutId="activeNav"
@@ -104,16 +125,19 @@ export default function Header() {
 
           <div className="hidden md:flex items-center space-x-6">
             <CartDrawer />
-            <div className="h-6 w-[1px] bg-[#2d4a3e]/10"></div>
-            <AuthButtons />
+            <motion.div
+              style={{ backgroundColor: textColor }}
+              className="h-6 w-[1px] opacity-20"
+            ></motion.div>
+            <AuthButtons textColor={textColor} />
           </div>
 
           <button
-            className="md:hidden text-[#2d4a3e] p-2 hover:bg-[#2d4a3e]/5 rounded-full transition-colors"
+            className="md:hidden p-2 rounded-full transition-colors"
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-6 h-6 text-[#5a7c5e]" />
           </button>
         </div>
       </motion.header>
@@ -170,8 +194,8 @@ export default function Header() {
                 <div className="pt-6 border-t border-[#2d4a3e]/10">
                   <CartDrawer />
                 </div>
-                <div className="flex justify-center">
-                  <AuthButtons />
+                <div className="flex flex-col gap-4">
+                  <AuthButtons isMobile />
                 </div>
               </div>
             </motion.div>
@@ -182,7 +206,7 @@ export default function Header() {
   );
 }
 
-function AuthButtons() {
+function AuthButtons({ textColor, isMobile }: { textColor?: MotionValue<string>; isMobile?: boolean }) {
   const [mounted, setMounted] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -204,15 +228,21 @@ function AuthButtons() {
 
   if (token) {
     return (
-      <div className="flex items-center gap-4">
+      <div className={cn("flex items-center gap-4", isMobile && "flex-col w-full")}>
         {userId && (
-          <Link href={`/dashboard/${userId}`}>
-            <button className="flex items-center gap-2 text-sm font-medium text-[#1f3a2e] hover:text-[#5a7c5e] transition-colors group">
+          <Link href={`/dashboard/${userId}`} className={cn(isMobile && "w-full")}>
+            <motion.button
+              style={{ color: !isMobile ? (textColor || "#1f3a2e") : "#1f3a2e" }}
+              className={cn(
+                "flex items-center gap-2 text-sm font-medium transition-colors group",
+                isMobile && "w-full justify-center p-3 bg-[#e8e0cc]/30 rounded-full"
+              )}
+            >
               <div className="w-8 h-8 rounded-full bg-[#5a7c5e]/10 flex items-center justify-center group-hover:bg-[#5a7c5e] group-hover:text-white transition-colors">
                 <User className="w-4 h-4" />
               </div>
-              <span className="hidden lg:inline">Profile</span>
-            </button>
+              <span>Profile</span>
+            </motion.button>
           </Link>
         )}
         <button
@@ -221,7 +251,10 @@ function AuthButtons() {
             localStorage.removeItem("userId");
             window.location.reload();
           }}
-          className="text-sm font-medium text-red-500 hover:text-red-700 transition-colors"
+          className={cn(
+            "text-sm font-medium text-red-500 hover:text-red-700 transition-colors",
+            isMobile && "w-full py-2 border border-red-200 rounded-full"
+          )}
         >
           Logout
         </button>
@@ -230,14 +263,28 @@ function AuthButtons() {
   }
 
   return (
-    <div className="flex gap-3">
-      <Link href="/login">
-        <button className="px-5 py-2 text-sm font-medium text-[#1f3a2e] border border-[#1f3a2e] rounded-full hover:bg-[#1f3a2e] hover:text-white transition-all shadow-sm hover:shadow-md">
+    <div className={cn("flex gap-3", isMobile && "flex-col w-full")}>
+      <Link href="/login" className={cn(isMobile && "w-full")}>
+        <motion.button
+          style={{
+            color: !isMobile ? (textColor || "#1f3a2e") : "#1f3a2e",
+            borderColor: !isMobile ? (textColor || "#1f3a2e") : "#1f3a2e"
+          }}
+          whileHover={!isMobile ? {
+            backgroundColor: "#1f3a2e",
+            color: "#ffffff",
+            borderColor: "#1f3a2e"
+          } : {}}
+          className={cn(
+            "px-5 py-2 text-sm font-medium border rounded-full transition-all shadow-sm hover:shadow-md",
+            isMobile && "w-full justify-center border-[#1f3a2e] text-[#1f3a2e]"
+          )}
+        >
           Login
-        </button>
+        </motion.button>
       </Link>
-      <Link href="/signup">
-        <button className="px-5 py-2 text-sm font-medium text-white bg-[#5a7c5e] rounded-full hover:bg-[#4a6b50] transition-all shadow-sm hover:shadow-md hover:scale-105">
+      <Link href="/signup" className={cn(isMobile && "w-full")}>
+        <button className="w-full px-5 py-2 text-sm font-medium text-white bg-[#5a7c5e] rounded-full hover:bg-[#4a6b50] transition-all shadow-sm hover:shadow-md hover:scale-105">
           Sign Up
         </button>
       </Link>

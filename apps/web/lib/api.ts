@@ -29,8 +29,78 @@ export async function getUserDetails() {
 }
 
 export async function getProducts() {
-  const res = await api.get("product");
-  return res.data.data;
+  // const res = await api.get("product");
+  // return res.data.data;
+
+  // Returning static data as per user request
+  return [
+    {
+      id: "1",
+      name: "Natural Jaggery",
+      description: "Pure, chemical-free jaggery blocks made from the finest sugarcane. Rich in minerals and perfect for daily consumption.",
+      price: 150,
+      imageUrl: "/assets/productImages/natural-jaggery.png",
+      stock: 50,
+      categoryId: "jaggery",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "2",
+      name: "Jaggery Powder",
+      description: "Convenient and natural jaggery powder. Excellent natural sweetener for tea, coffee, and desserts.",
+      price: 180,
+      imageUrl: "/assets/productImages/jaggery-powder.png",
+      stock: 45,
+      categoryId: "jaggery",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "3",
+      name: "Groundnut Oil",
+      description: "Wood-pressed groundnut oil. Retains natural flavor and nutrients. Heart-healthy and perfect for Indian cooking.",
+      price: 450,
+      imageUrl: "/assets/productImages/groundnut-oil.png",
+      stock: 30,
+      categoryId: "oil",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "4",
+      name: "Coconut Oil",
+      description: "Pure cold-pressed coconut oil. Ideal for cooking, skin, and hair care. Extracted from fresh coconuts.",
+      price: 350,
+      imageUrl: "/assets/productImages/coconut-oil.png",
+      stock: 25,
+      categoryId: "oil",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "5",
+      name: "Family Wellness Combo",
+      description: "Includes 1L Groundnut Oil, 500ml Coconut Oil, and 1kg Natural Jaggery. The perfect starter pack for a healthy kitchen.",
+      price: 899,
+      imageUrl: "/assets/productImages/family-combo.png",
+      stock: 50,
+      categoryId: "combos",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "6",
+      name: "Sweet & Pure Combo",
+      description: "A delightful pair of 1kg Jaggery Powder and 1kg Natural Jaggery cubes. Double the sweetness, double the health.",
+      price: 320,
+      imageUrl: "/assets/productImages/sweet-pure-combo.png",
+      stock: 100,
+      categoryId: "combos",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ];
 }
 
 export async function getOneProduct(id: string) {

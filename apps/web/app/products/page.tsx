@@ -11,9 +11,9 @@ export default function ShopPage() {
   const [products, setProducts] = useState<ProductCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("ALL");
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const categories = ["ALL", "OILS", "JAGGERY", "GHEE"];
+
+  const categories = ["ALL", "OILS", "JAGGERY", "COMBOS"];
 
   useEffect(() => {
     async function fetchProducts() {
@@ -23,7 +23,7 @@ export default function ShopPage() {
           // Simple logic to guess category from name/desc if not in DB
           let category = "OILS";
           if (p.name.toLowerCase().includes("jaggery")) category = "JAGGERY";
-          if (p.name.toLowerCase().includes("ghee")) category = "GHEE";
+          if (p.name.toLowerCase().includes("combo")) category = "COMBOS";
 
           return {
             id: p.id,
@@ -49,8 +49,7 @@ export default function ShopPage() {
 
   const filteredProducts = products.filter(p => {
     const matchesCategory = filter === "ALL" || p.tags.includes(filter);
-    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesCategory;
   });
 
   return (
@@ -64,7 +63,7 @@ export default function ShopPage() {
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-serif font-bold text-white mb-6"
+            className="text-4xl md:text-7xl font-serif font-bold text-white mb-6"
           >
             Our Collection
           </motion.h1>
@@ -72,43 +71,31 @@ export default function ShopPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[#b8d99b] text-xl max-w-2xl mx-auto"
+            className="text-[#b8d99b] text-lg md:text-xl max-w-2xl mx-auto"
           >
             Curated purity for your wellness journey.
           </motion.p>
         </div>
       </section>
 
-      {/* Filter & Search Bar */}
+      {/* Filter Bar */}
       <section className="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-[#e8e0cc] shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="container mx-auto px-6 py-4 flex justify-start md:justify-center overflow-x-auto scrollbar-hide">
 
           {/* Categories */}
-          <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+          <div className="flex gap-2 w-max md:w-auto pb-2 md:pb-0">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
                 className={`px-6 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap ${filter === cat
-                    ? "bg-[#1f3a2e] text-white shadow-lg"
-                    : "bg-[#e8e0cc]/50 text-[#5a7c5e] hover:bg-[#e8e0cc]"
+                  ? "bg-[#1f3a2e] text-white shadow-lg"
+                  : "bg-[#e8e0cc]/50 text-[#5a7c5e] hover:bg-[#e8e0cc]"
                   }`}
               >
                 {cat}
               </button>
             ))}
-          </div>
-
-          {/* Search */}
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5a7c5e]" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#f0f0f0] border-none rounded-full focus:ring-2 focus:ring-[#5a7c5e] outline-none text-[#1f3a2e]"
-            />
           </div>
         </div>
       </section>
@@ -119,7 +106,7 @@ export default function ShopPage() {
           <div className="text-center py-24 text-lg text-[#5a7c5e]">Cultivating Products...</div>
         ) : (
           <>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredProducts.map((product, idx) => (
                 <ProductCard key={product.id} {...product} index={idx} />
               ))}

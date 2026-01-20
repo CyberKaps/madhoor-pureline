@@ -64,9 +64,22 @@ export default function ProductSection() {
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {products.map((product, idx) => (
+          {products.slice(0, 3).map((product, idx) => (
             <ProductCard key={product.id} {...product} index={idx} />
           ))}
+        </div>
+
+        <div className="flex justify-center mt-16">
+          <a href="/products">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3 bg-transparent border-2 border-[#5a7c5e] text-[#1f3a2e] font-serif font-bold text-lg rounded-full hover:bg-[#5a7c5e] hover:text-white transition-all shadow-sm hover:shadow-lg flex items-center gap-2"
+            >
+              View All Products
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            </motion.button>
+          </a>
         </div>
       </div>
     </section>

@@ -71,18 +71,18 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Map Placeholder or Styled Graphic */}
-            <div className="w-full h-64 bg-[#e8e0cc] rounded-3xl overflow-hidden relative">
-              <img
-                src="/assets/NatureBg.png"
-                alt="Location"
-                className="w-full h-full object-cover opacity-80"
+            {/* Google Map */}
+            <div className="w-full h-80 bg-[#e8e0cc] rounded-3xl overflow-hidden shadow-lg border border-[#e8e0cc] relative">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3728.491235072155!2d75.78789577551095!3d20.852241293817514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd99f0074a40df3%3A0x6da9d81c1ba7e693!2sMadhoor%20Pureline!5e0!3m2!1sen!2sin!4v1768941892187!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                <Button variant="secondary" className="bg-white/90 backdrop-blur text-[#1f3a2e]">
-                  <MapPin className="w-4 h-4 mr-2" /> Locate Us
-                </Button>
-              </div>
             </div>
 
           </motion.div>

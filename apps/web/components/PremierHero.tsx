@@ -71,7 +71,7 @@ export default function PremierHero() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -50 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="text-6xl md:text-8xl font-bold text-white leading-tight drop-shadow-lg font-serif"
+                                className="text-4xl md:text-8xl font-bold text-white leading-tight drop-shadow-lg font-serif"
                             >
                                 Nature's <span className="text-[#b8d99b] inline-block">Gold</span> <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#e8e0cc]">
@@ -85,7 +85,7 @@ export default function PremierHero() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -50 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
-                                className="text-6xl md:text-8xl font-bold text-white leading-tight drop-shadow-lg font-serif"
+                                className="text-4xl md:text-8xl font-bold text-white leading-tight drop-shadow-lg font-serif"
                             >
                                 Pure <span className="text-[#e8e0cc] inline-block">Sweetness</span> <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#b8d99b]">
