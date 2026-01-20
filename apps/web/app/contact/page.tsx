@@ -1,72 +1,133 @@
-import React from "react";
+"use client";
 
-const contactMethods = [
-  {
-    icon: (
-      <svg className="w-10 h-10 text-[#5a7c5e]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 10.5V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h7.5M21 10.5l-9 4.5-9-4.5M21 10.5v7a2 2 0 01-2 2h-7.5" /></svg>
-    ),
-    title: "Email Us",
-    detail: "madhoorpureline@gmail.com",
-    action: (
-      <a href="mailto:madhoorpureline@gmail.com" className="text-[#5a7c5e] font-bold hover:underline">Send Email ↗</a>
-    ),
-  },
-  {
-    icon: (
-      <svg className="w-10 h-10 text-[#5a7c5e]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16.72 12.06a11.05 11.05 0 01-4.78-4.78l2.2-2.2a1 1 0 00.24-1.05l-1-3A1 1 0 0012.07 1H7a2 2 0 00-2 2v3a16 16 0 0016 16h3a2 2 0 002-2v-5.07a1 1 0 00-.73-.96l-3-1a1 1 0 00-1.05.24l-2.2 2.2z" /></svg>
-    ),
-    title: "WhatsApp",
-    detail: "Chat with us instantly",
-    action: (
-      <a href="https://wa.me/919423041414" target="_blank" rel="noopener noreferrer" className="text-[#5a7c5e] font-bold hover:underline">Open WhatsApp ↗</a>
-    ),
-  },
-  {
-    icon: (
-      <svg className="w-10 h-10 text-[#5a7c5e]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    ),
-    title: "Response Time",
-    detail: "We typically respond within 24 hours",
-    action: <span className="text-[#7a9b5c]">Mon - Sat, 9 AM - 6 PM IST</span>,
-  },
-  {
-    icon: (
-      <svg className="w-10 h-10 text-[#5a7c5e]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-    ),
-    title: "Pan India Shipping",
-    detail: "We ship across India",
-    action: <span className="text-[#7a9b5c]">Free shipping on orders above ₹999</span>,
-  },
-];
+import React from "react";
+import { motion } from "framer-motion";
+import { Mail, Phone, Clock, MapPin, Send, MessageCircle } from "lucide-react";
+import { Button } from "../../components/ui/button";
 
 const Contact = () => {
   return (
-    <main className="bg-gradient-to-b from-[#dcd6c4] to-[#c9c0a8] min-h-screen pb-20">
-      <div className="max-w-7xl mx-auto px-4 pt-16">
-        <h1 className="text-5xl font-extrabold text-center mb-4 text-[#1f3a2e]">Get in Touch</h1>
-        <p className="text-center text-lg text-[#4a6b50] mb-12">Have questions? Reach out to us through any of the channels below.</p>
-        <div className="max-w-2xl mx-auto bg-[#f5fbe9] rounded-3xl shadow-2xl border border-[#e8e0cc] p-10 mb-12 relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none rounded-3xl" style={{boxShadow: '0 8px 40px 0 rgba(90,124,94,0.10)'}} />
-          <h2 className="text-3xl font-extrabold text-[#1f3a2e] mb-2 tracking-tight drop-shadow">Contact Information</h2>
-          <div className="h-1 w-20 bg-gradient-to-r from-[#5a7c5e] to-[#7a9b5c] rounded mb-4 mx-auto" />
-          <p className="text-[#4a6b50] mb-8 text-center text-lg">Reach out to us through any of these channels. We're here to help!</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {contactMethods.map((method, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col items-center bg-white rounded-2xl border border-[#e8e0cc] p-7 text-center transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-transparent hover:bg-gradient-to-br hover:from-[#e8e0cc] hover:to-[#dcd6c4] group relative overflow-hidden"
-                style={{boxShadow: '0 2px 16px 0 rgba(90,124,94,0.07)'}}
-              >
-                <div className="mb-4 flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#e8e0cc] to-[#dcd6c4] shadow group-hover:from-[#5a7c5e] group-hover:to-[#7a9b5c] group-hover:scale-105 transition-all duration-300">
-                  {React.cloneElement(method.icon, { className: 'w-8 h-8 text-[#5a7c5e] group-hover:text-white transition-colors duration-300' })}
+    <main className="min-h-screen bg-[#f5fbe9] relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#5a7c5e]/10 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#b8d99b]/20 rounded-full blur-[100px] pointer-events-none translate-y-1/2 -translate-x-1/2"></div>
+
+      <div className="container mx-auto px-6 py-24 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-5xl md:text-6xl font-serif font-bold text-[#1f3a2e] mb-6">Let's Connect</h1>
+          <p className="text-xl text-[#4a6b50] max-w-2xl mx-auto">
+            Have questions about our organic products? We're here to help you on your wellness journey.
+          </p>
+        </motion.div>
+
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
+
+          {/* Contact Info & Map */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="w-full lg:w-1/2 space-y-8"
+          >
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#e8e0cc] hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-[#5a7c5e]/10 rounded-full flex items-center justify-center text-[#5a7c5e] mb-4">
+                  <Mail className="w-6 h-6" />
                 </div>
-                <div className="text-lg font-bold text-[#1f3a2e] mb-1 group-hover:text-[#5a7c5e] transition-colors duration-300">{method.title}</div>
-                <div className="text-[#4a6b50] mb-2">{method.detail}</div>
-                <div>{method.action}</div>
-                <div className="absolute inset-0 pointer-events-none rounded-2xl border-2 border-transparent group-hover:border-[#5a7c5e] transition-all duration-300" />
+                <h3 className="font-bold text-[#1f3a2e] mb-1">Email Us</h3>
+                <a href="mailto:madhoorpureline@gmail.com" className="text-[#4a6b50] hover:text-[#5a7c5e] transition-colors">
+                  madhoorpureline@gmail.com
+                </a>
               </div>
-            ))}
-          </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#e8e0cc] hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-[#5a7c5e]/10 rounded-full flex items-center justify-center text-[#5a7c5e] mb-4">
+                  <MessageCircle className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-[#1f3a2e] mb-1">WhatsApp</h3>
+                <a href="https://wa.me/919423041414" className="text-[#4a6b50] hover:text-[#5a7c5e] transition-colors">
+                  +91 94230 41414
+                </a>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#e8e0cc] hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-[#5a7c5e]/10 rounded-full flex items-center justify-center text-[#5a7c5e] mb-4">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-[#1f3a2e] mb-1">Response Time</h3>
+                <p className="text-[#4a6b50]">Mon - Sat, 9 AM - 6 PM</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#e8e0cc] hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 bg-[#5a7c5e]/10 rounded-full flex items-center justify-center text-[#5a7c5e] mb-4">
+                  <MapPin className="w-6 h-6" />
+                </div>
+                <h3 className="font-bold text-[#1f3a2e] mb-1">Location</h3>
+                <p className="text-[#4a6b50]">Shipping across India</p>
+              </div>
+            </div>
+
+            {/* Map Placeholder or Styled Graphic */}
+            <div className="w-full h-64 bg-[#e8e0cc] rounded-3xl overflow-hidden relative">
+              <img
+                src="/assets/NatureBg.png"
+                alt="Location"
+                className="w-full h-full object-cover opacity-80"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                <Button variant="secondary" className="bg-white/90 backdrop-blur text-[#1f3a2e]">
+                  <MapPin className="w-4 h-4 mr-2" /> Locate Us
+                </Button>
+              </div>
+            </div>
+
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="w-full lg:w-1/2"
+          >
+            <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-2xl border border-[#e8e0cc] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#b8d99b]/20 rounded-bl-full pointer-events-none"></div>
+
+              <h2 className="text-2xl font-bold text-[#1f3a2e] mb-6 font-serif">Send us a Message</h2>
+
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#4a6b50] tracking-wide uppercase">First Name</label>
+                    <input type="text" className="w-full bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:bg-white transition-all" placeholder="John" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-[#4a6b50] tracking-wide uppercase">Last Name</label>
+                    <input type="text" className="w-full bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:bg-white transition-all" placeholder="Doe" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#4a6b50] tracking-wide uppercase">Email Address</label>
+                  <input type="email" className="w-full bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:bg-white transition-all" placeholder="john@example.com" />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#4a6b50] tracking-wide uppercase">Message</label>
+                  <textarea rows={4} className="w-full bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:bg-white transition-all resize-none" placeholder="Tell us about your needs..." />
+                </div>
+
+                <Button className="w-full h-12 bg-[#1f3a2e] hover:bg-[#5a7c5e] text-white rounded-lg text-lg font-bold shadow-lg transition-all" size="lg">
+                  Send Message <Send className="w-5 h-5 ml-2" />
+                </Button>
+              </form>
+
+            </div>
+          </motion.div>
         </div>
       </div>
     </main>

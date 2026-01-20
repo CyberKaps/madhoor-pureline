@@ -1,7 +1,15 @@
-
 "use client";
+
 import React, { useState } from "react";
-import { Button } from "../../components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "../../components/ui/dialog";
+import { motion } from "framer-motion";
+import { Star, Quote, Plus } from "lucide-react";
 
 interface Review {
   name: string;
@@ -67,34 +75,42 @@ const initialReviews: Review[] = [
   },
 ];
 
-const ReviewCard = ({ review }: { review: Review }) => (
-  <div className="bg-gradient-to-br from-[#f5fbe9] to-[#e8e0cc] rounded-3xl shadow-xl border border-[#e8e0cc] p-8 flex flex-col gap-2 hover:shadow-2xl transition-shadow duration-300 w-full md:w-[390px] lg:w-[420px] mx-auto h-full">
-    <div className="flex items-center gap-2 mb-1">
-      <span className="font-bold text-[#1f3a2e]">{review.name}</span>
-      <span className="text-[#7a9b5c] text-sm">{new Date(review.date).toLocaleDateString()}</span>
-    </div>
-    <div className="flex items-center gap-1 mb-2">
+const ReviewCard = ({ review, index }: { review: Review, index: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+    viewport={{ once: true }}
+    className="bg-white/60 backdrop-blur-md rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-[#e8e0cc] break-inside-avoid mb-6"
+  >
+    <div className="flex gap-1 mb-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg
+        <Star
           key={i}
-          className={`w-5 h-5 ${i < review.rating ? 'text-[#5a7c5e]' : 'text-[#e8e0cc]'}`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
-        </svg>
+          className={`w-4 h-4 ${i < review.rating ? 'text-[#f59e0b] fill-[#f59e0b]' : 'text-[#e8e0cc]'}`}
+        />
       ))}
     </div>
-    <div className="text-[#4a6b50] text-base mb-2">{review.comment}</div>
-  </div>
+
+    <p className="text-[#2d4a3e] text-lg font-light leading-relaxed mb-6 italic">
+      "{review.comment}"
+    </p>
+
+    <div className="flex justify-between items-end border-t border-[#2d4a3e]/10 pt-4">
+      <div>
+        <span className="block font-bold text-[#1f3a2e] text-lg font-serif">{review.name}</span>
+        <span className="text-[#7a9b5c] text-xs font-bold uppercase tracking-wider">Verified Buyer</span>
+      </div>
+      <span className="text-[#7a9b5c]/60 text-xs">{new Date(review.date).toLocaleDateString()}</span>
+    </div>
+  </motion.div>
 );
 
 const ReviewsPage = () => {
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [showForm, setShowForm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({ name: "", rating: 5, comment: "" });
   const [error, setError] = useState("");
-  const [showAll, setShowAll] = useState(false);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -115,98 +131,139 @@ const ReviewsPage = () => {
       ...reviews,
     ]);
     setForm({ name: "", rating: 5, comment: "" });
-    setShowForm(false);
+    setIsModalOpen(false);
     setError("");
   };
 
   return (
-    <main className="bg-gradient-to-b from-[#dcd6c4] to-[#c9c0a8] min-h-screen pb-20">
-      <div className="max-w-6xl mx-auto px-4 pt-16">
-        <div className="mb-10">
-          <h1 className="text-5xl font-extrabold text-center mb-3 text-[#1f3a2e] drop-shadow-lg tracking-tight font-serif">Customer Reviews</h1>
-          <div className="flex justify-center mb-3">
-            <div className="h-1 w-24 bg-gradient-to-r from-[#5a7c5e] to-[#7a9b5c] rounded" />
-          </div>
-          <p className="text-center text-lg text-[#4a6b50] mb-2">See what our customers are saying about Madhoor Pureline products.</p>
-        </div>
-        {/* Buttons below reviews grid */}
-        {showForm && (
-          <div className="bg-white rounded-2xl shadow-xl border border-[#e8e0cc] p-8 mb-10 animate-fade-in">
-            <h2 className="text-2xl font-bold text-[#1f3a2e] mb-4">Add Your Review</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-[#4a6b50] font-semibold mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleInput}
-                  className="w-full border border-[#e8e0cc] rounded-lg px-4 py-2 focus:outline-none focus:border-[#5a7c5e]"
-                  maxLength={32}
-                  required
-                />
-              </div>
-              {/* ...existing code... (removed accidental Button inside form) */}
-              <div>
-                <label className="block text-[#4a6b50] font-semibold mb-1">Comment</label>
-                <textarea
-                  name="comment"
-                  value={form.comment}
-                  onChange={handleInput}
-                  className="w-full border border-[#e8e0cc] rounded-lg px-4 py-2 focus:outline-none focus:border-[#5a7c5e]"
-                  rows={4}
-                  maxLength={300}
-                  required
-                />
-              </div>
-              {error && <div className="text-red-500 font-semibold">{error}</div>}
-              <div className="flex gap-4 mt-4">
-                <button
-                  type="submit"
-                  className="bg-gradient-to-br from-[#5a7c5e] to-[#7a9b5c] text-white font-bold px-6 py-2 rounded-full shadow hover:scale-105 hover:shadow-lg transition-all duration-200"
-                >
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  className="bg-[#e8e0cc] text-[#5a7c5e] font-bold px-6 py-2 rounded-full shadow hover:bg-[#dcd6c4] transition-all duration-200"
-                  onClick={() => { setShowForm(false); setError(""); }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {reviews.length === 0 ? (
-            <div className="text-center text-[#4a6b50] col-span-full">No reviews yet. Be the first to add one!</div>
-          ) : (
-            (showAll ? reviews : reviews.slice(0, 6)).map((review, idx) => (
-              <div key={idx} className="flex h-full">
-                <ReviewCard review={review} />
-              </div>
-            ))
-          )}
-        </div>
-        <div className="flex justify-center gap-4 mt-12">
-          <button
-            className="bg-gradient-to-br from-[#5a7c5e] to-[#7a9b5c] text-white font-bold px-8 py-3 rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#5a7c5e] focus:ring-offset-2"
-            onClick={() => setShowForm(true)}
+    <main className="bg-[#f5fbe9] min-h-screen">
+      {/* Header Summary */}
+      <section className="bg-[#1f3a2e] text-white py-24 px-6 rounded-b-[3rem] shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/assets/grain.png')] opacity-10"></div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-6xl font-serif font-bold mb-6"
           >
-            <span className="inline-block align-middle"></span> Add Review
-          </button>
-          {reviews.length > 6 && (
-            <button
-              className="bg-gradient-to-br from-[#5a7c5e] to-[#7a9b5c] text-white font-bold px-8 py-3 rounded-full shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#5a7c5e] focus:ring-offset-2"
-              onClick={() => setShowAll((prev) => !prev)}
-            >
-              {showAll ? <span className="inline-block align-middle">✖️</span> : <span className="inline-block align-middle"></span>} {showAll ? 'Close Reviews' : 'View All Reviews'}
-            </button>
-          )}
+            Loved by Nature,<br />Loved by You
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 mt-12"
+          >
+            <div className="text-center">
+              <span className="text-6xl font-bold block mb-2 text-[#b8d99b]">4.9</span>
+              <div className="flex gap-1 justify-center mb-1">
+                {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />)}
+              </div>
+              <span className="text-sm opacity-80">Average Rating</span>
+            </div>
+
+            <div className="h-16 w-[1px] bg-white/20 hidden md:block"></div>
+
+            <div className="text-center">
+              <span className="text-6xl font-bold block mb-2 text-[#b8d99b]">2k+</span>
+              <span className="text-sm opacity-80 uppercase tracking-widest font-bold">Happy Families</span>
+            </div>
+          </motion.div>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 py-20">
+
+        {/* Floating Add Button */}
+        <div className="flex justify-end mb-8 sticky top-24 z-30 pointer-events-none">
+          <div className="pointer-events-auto">
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogTrigger asChild>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-[#1f3a2e] text-white font-bold px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-[#5a7c5e] transition-colors"
+                >
+                  <Plus className="w-5 h-5" /> Write a Review
+                </motion.button>
+              </DialogTrigger>
+
+              <DialogContent className="sm:max-w-[500px] bg-[#f5fbe9] border border-[#e8e0cc]">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold text-[#1f3a2e] text-center font-serif">Share Your Experience</DialogTitle>
+                </DialogHeader>
+
+                <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                  <div>
+                    <label className="block text-[#4a6b50] font-semibold mb-1 text-sm uppercase tracking-wide">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={form.name}
+                      onChange={handleInput}
+                      className="w-full bg-white border border-[#e8e0cc] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:ring-1 focus:ring-[#5a7c5e] transition-all"
+                      maxLength={32}
+                      required
+                      placeholder="Your name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[#4a6b50] font-semibold mb-1 text-sm uppercase tracking-wide">Rating</label>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => handleRating(star)}
+                          className={`transition-transform hover:scale-110 ${form.rating >= star ? 'text-[#f59e0b]' : 'text-[#e8e0cc]'}`}
+                        >
+                          <Star className={`w-8 h-8 ${form.rating >= star ? 'fill-[#f59e0b]' : ''}`} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[#4a6b50] font-semibold mb-1 text-sm uppercase tracking-wide">Comment</label>
+                    <textarea
+                      name="comment"
+                      value={form.comment}
+                      onChange={handleInput}
+                      className="w-full bg-white border border-[#e8e0cc] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:ring-1 focus:ring-[#5a7c5e] transition-all"
+                      rows={4}
+                      maxLength={300}
+                      required
+                      placeholder="How did you like our products?"
+                    />
+                  </div>
+
+                  {error && <div className="text-red-500 font-semibold text-sm">{error}</div>}
+
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full bg-[#1f3a2e] text-white font-bold py-3 rounded-lg shadow hover:bg-[#5a7c5e] transition-all duration-200"
+                    >
+                      Submit Review
+                    </button>
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
+
+        {/* Masonry-style Grid */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          {reviews.map((review, idx) => (
+            <ReviewCard key={idx} review={review} index={idx} />
+          ))}
+        </div>
+      </div>
     </main>
   );
 }
+
 export default ReviewsPage;

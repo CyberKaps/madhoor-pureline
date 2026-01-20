@@ -28,21 +28,22 @@ export const signup = async (req: Request, res: Response) => {
     const token = createJWT(user);
 
     res.cookie("token", token, {
-      httpOnly: true, 
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       maxAge: 24 * 60 * 60 * 1000
-    } );
+    });
 
     res.status(201).json({
       message: "Registered Successfully",
       success: true,
-      userId: user.id,  
-      user: { 
-        id: user.id, 
-        name: user.name, 
-        email: user.email 
+      userId: user.id,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email
       },
+      token
     });
   } catch (error) {
     console.error(error);
@@ -72,19 +73,20 @@ export const login = async (req: Request, res: Response) => {
     const token = createJWT(user);
 
     res.cookie("token", token, {
-      httpOnly: true, 
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
       maxAge: 24 * 60 * 60 * 1000
-    } );
+    });
 
     res.status(200).json({
       success: true,
-      userId: user.id,  
+      userId: user.id,
       user: { id: user.id, name: user.name, email: user.email },
+      token
     });
 
-    
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Server error during login' });
@@ -94,7 +96,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     if (!userId) {
       return res.status(401).json({ message: 'Unauthorized' });
@@ -115,20 +117,20 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const logOutUser = async (req: Request, res: Response) => {
 
-    const token = req.cookies.token;
+  const token = req.cookies.token;
 
-    if(token) {
-        await redisClient.set(`blacklist:${token}`, 'true', 'EX', 24 * 60 * 60); 
-    }
+  if (token) {
+    await redisClient.set(`blacklist:${token}`, 'true', 'EX', 24 * 60 * 60);
+  }
 
-    res.clearCookie("token", { 
-        httpOnly: true, 
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-    });
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+  });
 
-    return res.status(200).json({
-        message: "Logged out successfully",
-    });
+  return res.status(200).json({
+    message: "Logged out successfully",
+  });
 
 }

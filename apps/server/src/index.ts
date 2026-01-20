@@ -18,9 +18,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  credentials: true
+}));
 
-app.post( "/api/payment/razorpay/webhook", bodyParser.raw({ type: "application/json" }), razorpayWebhook );
+app.post("/api/payment/razorpay/webhook", bodyParser.raw({ type: "application/json" }), razorpayWebhook);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

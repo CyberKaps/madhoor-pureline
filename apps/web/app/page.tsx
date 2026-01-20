@@ -1,18 +1,17 @@
 
 
-import HeroCarousel from "../components/HeroBg";
-import HeroSection from "../components/HeroSection";
+import PremierHero from "../components/PremierHero";
 import ProductSection from "../components/Product";
+import FeaturedReviews from "../components/FeaturedReviews";
 import FAQ from "../components/FAQ";
-
 
 
 export default function Home() {
   return (
     <>
-      <HeroCarousel />
-      <HeroSection />
+      <PremierHero />
       <ProductSection />
+      <FeaturedReviews />
       <FAQ />
     </>
   );

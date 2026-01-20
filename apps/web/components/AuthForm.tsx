@@ -12,6 +12,9 @@ import {
   FormControl,
   FormMessage,
 } from "./ui/form"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
+import { Loader2 } from "lucide-react"
 
 type FormType = "log-in" | "sign-up"
 
@@ -26,13 +29,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
   })
   const router = useRouter()
 
-  const { handleLogIn, handleSignUp } = useAuth()
+  const { handleLogIn, handleSignUp, loading } = useAuth()
 
   const onSubmit = async (data: any) => {
     if (isLogIn) {
       const res = await handleLogIn(data.email, data.password)
-
-
       if (res.success && res.userId) {
         toast.success("Signed in successfully ✅")
         router.push(`/dashboard/${res.userId}`)
@@ -51,23 +52,26 @@ const AuthForm = ({ type }: { type: FormType }) => {
   }
 
   return (
-    <section className="flex items-center justify-center min-h-screen bg-[#f5fbe9]">
-      <div className="lg:min-w-[500px] border-2 border-[#f57c3b] rounded-2xl shadow-xl bg-white">
-        <div className="flex flex-col gap-6 py-14 px-10">
+    <section className="flex items-center justify-center min-h-screen bg-[#f0ece0] py-12">
+      <div className="w-full max-w-md mx-4 bg-white rounded-xl shadow-lg border border-[#e0dac5] overflow-hidden">
+        <div className="flex flex-col gap-6 py-10 px-8">
           {/* Brand Header */}
-          <div className="flex justify-center">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-[#f57c3b] rounded-sm"></div>
-              <span className="font-bold text-lg text-[#243629]">
-                Madhoor Pureline
-              </span>
-            </div>
+          <div className="flex flex-col items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
+              <img src="/assets/MadhoorLogo.png" alt="Madhoor Pureline" className="w-12 h-12 rounded-md object-cover" />
+            </Link>
+            <h1 className="text-2xl font-bold text-[#1f3a2e]">
+              {isLogIn ? "Welcome Back" : "Join Pureline"}
+            </h1>
+            <p className="text-sm text-[#4a6b50] text-center">
+              {isLogIn ? "Sign in to access your wellness journey" : "Create an account to start your pure promise"}
+            </p>
           </div>
 
           {/* Form */}
           <FormProvider {...form}>
             <form
-              className="w-full space-y-6 mt-4"
+              className="w-full space-y-5"
               onSubmit={form.handleSubmit(onSubmit)}
             >
               {/* Name (only for Sign Up) */}
@@ -77,13 +81,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel className="text-[#1f3a2e]">Name</FormLabel>
                       <FormControl>
-                        <input
+                        <Input
                           {...field}
                           type="text"
                           placeholder="Your Name"
-                          className="border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-[#f57c3b] outline-none"
+                          className="border-[#c9c0a8] focus-visible:ring-[#5a7c5e]"
                         />
                       </FormControl>
                       <FormMessage />
@@ -98,13 +102,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="text-[#1f3a2e]">Email</FormLabel>
                     <FormControl>
-                      <input
+                      <Input
                         {...field}
                         type="email"
                         placeholder="Enter your email"
-                        className="border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-[#f57c3b] outline-none"
+                        className="border-[#c9c0a8] focus-visible:ring-[#5a7c5e]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -118,13 +122,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="text-[#1f3a2e]">Password</FormLabel>
                     <FormControl>
-                      <input
+                      <Input
                         {...field}
                         type="password"
                         placeholder="Enter your password"
-                        className="border rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-[#f57c3b] outline-none"
+                        className="border-[#c9c0a8] focus-visible:ring-[#5a7c5e]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -133,28 +137,27 @@ const AuthForm = ({ type }: { type: FormType }) => {
               />
 
               {/* Submit Button */}
-              <div className="flex justify-center">
-                <button
-                  className="bg-[#243629] hover:bg-[#355a42] transition-all duration-300 
-                             rounded-lg w-1/2 text-white py-2 font-semibold shadow-md"
-                  type="submit"
-                >
-                  {isLogIn ? "Log In" : "Create an Account"}
-                </button>
-              </div>
+              <Button
+                className="w-full bg-[#5a7c5e] hover:bg-[#4a6b50] text-white font-semibold h-11 text-base mt-2"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                {isLogIn ? "Log In" : "Create Account"}
+              </Button>
             </form>
           </FormProvider>
 
           {/* Switch between SignIn / SignUp */}
-          <p className="text-center text-[#243629]">
-            {isLogIn ? "Don't have an account?" : "Already have an account?"}
+          <div className="text-center text-sm text-[#4a6b50]">
+            {isLogIn ? "Don't have an account? " : "Already have an account? "}
             <Link
-              className="font-bold text-[#f57c3b] ml-1 hover:underline"
+              className="font-semibold text-[#5a7c5e] hover:underline"
               href={isLogIn ? "/signup" : "/login"}
             >
               {!isLogIn ? "Log In" : "Sign Up"}
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </section>

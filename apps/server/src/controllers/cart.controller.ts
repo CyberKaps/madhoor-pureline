@@ -7,11 +7,11 @@ export const getCart = async (req: Request, res: Response) => {
     try {
 
         const userId = req.user.id;
-        
 
-        const cart = getCartWithItems(userId);
 
-        if(!cart) {
+        const cart = await getCartWithItems(userId);
+
+        if (!cart) {
             return res.status(200).json({
                 success: true,
                 cart: null,
@@ -19,12 +19,12 @@ export const getCart = async (req: Request, res: Response) => {
             });
         }
 
-        res.json({ 
-            success: true, 
-            cart 
+        res.json({
+            success: true,
+            cart
         });
 
-    } catch(e) {
+    } catch (e) {
         console.error(e)
         return res.status(500).json({
             success: false,
@@ -40,14 +40,14 @@ export const addToCart = async (req: Request, res: Response) => {
 
         const userId = req.user.id;
 
-        const { productId, quantity = 1} = req.body;
+        const { productId, quantity = 1 } = req.body;
 
         if (!productId || quantity <= 0) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid product or quantity",
             });
-         }
+        }
 
         // Ensure cart exists
         const cart = await getOrCreateCart(userId);
@@ -60,7 +60,7 @@ export const addToCart = async (req: Request, res: Response) => {
                 productId_cartId: {
                     productId,
                     cartId: cart.id,
-            },
+                },
             },
             update: {
                 quantity: { increment: quantity },
@@ -79,7 +79,7 @@ export const addToCart = async (req: Request, res: Response) => {
         })
 
 
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         return res.status(500).json({
             success: false,
@@ -107,7 +107,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
         const cartId = cart.id;
 
         // If quantity is 0 → remove item from cart
-        if(quantity === 0) {
+        if (quantity === 0) {
             await prismaClient.cartItem.delete({
                 where: {
                     productId_cartId: {
@@ -122,7 +122,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
                 message: "Item removed from cart",
             });
         }
-        
+
 
 
         // update quantity
@@ -144,16 +144,16 @@ export const updateCartItem = async (req: Request, res: Response) => {
         });
 
 
-    } catch(e) {
+    } catch (e) {
         console.error(e)
-        if( e instanceof CartNotFoundError) {
+        if (e instanceof CartNotFoundError) {
             return res.status(404).json({
-            success: false,
-            message: e.message,
-        });
+                success: false,
+                message: e.message,
+            });
         }
 
-        if( e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025"){
+        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
             return res.status(404).json({
                 success: false,
                 message: "Item not found in cart",
@@ -164,8 +164,8 @@ export const updateCartItem = async (req: Request, res: Response) => {
             success: false,
             error:
                 typeof e === "object" && e !== null && "message" in e
-                ? (e as any).message
-                : String(e),
+                    ? (e as any).message
+                    : String(e),
         });
     }
 }
@@ -204,7 +204,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
             message: "Item removed from cart",
         });
 
-    } catch(e) {
+    } catch (e) {
         console.error(e);
 
         // Cart not found
@@ -215,7 +215,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
             });
         }
 
-         // Item not found in cart
+        // Item not found in cart
         if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
             return res.status(404).json({
                 success: false,
@@ -227,8 +227,8 @@ export const removeFromCart = async (req: Request, res: Response) => {
             success: false,
             error:
                 typeof e === "object" && e !== null && "message" in e
-                ? (e as any).message
-                : String(e),
+                    ? (e as any).message
+                    : String(e),
         });
     }
 }
@@ -244,14 +244,14 @@ export const clearCart = async (req: Request, res: Response) => {
             }
         });
 
-        if(!cart) {
+        if (!cart) {
             return res.status(200).json({
                 success: true,
                 message: "Cart is already empty"
             });
         }
 
-        
+
         // Delete all items belonging to this cart
         await prismaClient.cartItem.deleteMany({
             where: {
@@ -264,14 +264,14 @@ export const clearCart = async (req: Request, res: Response) => {
             message: "Cart cleared successfully",
         });
 
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         return res.status(500).json({
             success: false,
             error:
                 typeof e === "object" && e !== null && "message" in e
-                ? (e as any).message
-                : String(e),
+                    ? (e as any).message
+                    : String(e),
         });
     }
 }

@@ -20,7 +20,7 @@ export function useAuth() {
     } catch (err: any) {
       return {
         success: false,
-        error: err.response?.data?.error || "Failed",
+        error: err.response?.data?.message || err.response?.data?.error || "Failed",
       } as const;
     } finally {
       setLoading(false);
@@ -35,7 +35,7 @@ export function useAuth() {
     } catch (err: any) {
       return {
         success: false,
-        error: err.response?.data?.error || "Failed",
+        error: err.response?.data?.message || err.response?.data?.error || "Failed",
       };
     } finally {
       setLoading(false);

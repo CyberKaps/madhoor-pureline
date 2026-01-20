@@ -1,263 +1,175 @@
-"use client"
+"use client";
 
 import { motion } from "framer-motion";
-import { Leaf, Heart, Shield, Droplet, Award, Users, Sparkles, Target } from "lucide-react";
+import { Leaf, Heart, Shield, Droplet, Award, Users, Sparkles, Target, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
-function page() {
+// Placeholder for images - ideally these would be imports
+// import aboutHero from "../../assets/aboutHero.jpg"; 
+
+export default function AboutPage() {
   return (
-    <main className="bg-gradient-to-b from-[#dcd6c4] to-[#c9c0a8] min-h-screen text-[#1f3a2e]">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#5a7c5e] to-[#4a6b50] py-24 px-6 overflow-hidden">
-        {/* Decorative Elements */}
-        <motion.div 
-          className="absolute top-20 right-20 opacity-10"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          <Leaf className="w-40 h-40 text-white" />
-        </motion.div>
-        
-        <div className="max-w-5xl mx-auto text-center text-white relative z-10">
+    <main className="bg-[#f5fbe9] min-h-screen text-[#1f3a2e] overflow-hidden">
+
+      {/* Parallax-style Hero */}
+      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[#1f3a2e]">
+          {/* Abstract organic shapes */}
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#5a7c5e] rounded-full blur-[150px] opacity-30 -translate-y-1/2 translate-x-1/3"></div>
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#b8d99b] rounded-full blur-[120px] opacity-20 translate-y-1/2 -translate-x-1/4"></div>
+          <div className="absolute inset-0 bg-[url('/assets/grain.png')] opacity-20"></div>
+        </div>
+
+        <div className="container relative z-10 text-center px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full mb-6"
           >
-            <Sparkles className="w-5 h-5" />
-            <span className="text-sm font-medium">Since 1999 - A Legacy of Purity</span>
-          </motion.div>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full mb-8 text-white/90">
+              <Sparkles className="w-4 h-4 text-[#b8d99b]" />
+              <span className="text-sm font-medium tracking-wider uppercase">Est. 1999</span>
+            </div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-6xl font-bold mb-6"
-          >
-            About Madhoor Pureline
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto"
-          >
-            Where purity meets health. Crafting wholesome, chemical-free food products
-            that nourish both body and soul.
-          </motion.p>
+            <h1 className="text-6xl md:text-8xl font-serif font-bold text-white mb-6 leading-tight">
+              Rooted in <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b8d99b] to-[#e8e0cc]">Tradition</span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-light leading-relaxed">
+              Crafting purity for over two decades. A legacy of wholesome, chemical-free nutrition.
+            </p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="py-20 px-6 md:px-20 bg-[#e8e0cc]">
-        <div className="max-w-6xl mx-auto">
+      {/* Story Section with Timeline vibe */}
+      <section className="py-24 px-6 container mx-auto">
+        <div className="flex flex-col md:flex-row gap-16 items-center">
           <motion.div
+            className="w-full md:w-1/2"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl font-bold mb-8 text-[#1f3a2e] flex items-center gap-3">
-              <div className="w-12 h-1 bg-[#5a7c5e]"></div>
-              Our Story & Vision
+            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-8 text-[#1f3a2e] leading-tight">
+              From Our Family <br /> to Yours.
             </h2>
+            <div className="space-y-6 text-lg text-[#4a6b50] leading-relaxed">
+              <p>
+                Madhoor Pureline began as a humble promise: to provide jaggery that tasted like home.
+                Starting as <strong>Krishna Organic Agro Products</strong> in 1999, we championed the cause of
+                chemical-free farming when it was still a novel concept.
+              </p>
+              <p>
+                Today, we have expanded our family of products to include premium
+                <strong> Hydraulic Cold Pressed Oils</strong>. Unlike industrial processing, our method relies
+                on patience and precision—extracting oils without heat to preserve every drop of nutrition.
+              </p>
+              <div className="p-6 bg-[#e8e0cc]/30 border-l-4 border-[#5a7c5e] rounded-r-xl italic text-[#2d4a3e]">
+                "Our oils are free from preservatives, added water, and palm oil. Just nature, bottled."
+              </div>
+            </div>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <p className="text-lg leading-relaxed text-[#2d4a3e]">
-                We are a proud extension of <strong className="text-[#5a7c5e]">Madhur Jaggery (Krishna Organic Agro Products)</strong> —
-                a trusted name in organic jaggery since 1999. With decades of experience
-                and a strong foundation built on integrity and innovation, we carry forward
-                a legacy of natural, high-quality food production.
-              </p>
-              <p className="text-lg leading-relaxed text-[#2d4a3e]">
-                In our expansion into the edible oil industry, we specialize in
-                <strong className="text-[#5a7c5e]"> Hydraulic Cold Pressed Oils</strong> made from carefully selected,
-                A1-grade raw materials. Our oils are free from preservatives, added water,
-                and palm oil, crafted with an indirect heating method that retains essential
-                nutrients and natural flavors — just as nature intended.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="bg-gradient-to-br from-[#5a7c5e] to-[#7a9b5c] p-8 rounded-2xl shadow-2xl">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="bg-white/90 p-6 rounded-xl text-center">
-                    <Award className="w-12 h-12 text-[#5a7c5e] mx-auto mb-3" />
-                    <p className="text-3xl font-bold text-[#1f3a2e]">25+</p>
-                    <p className="text-sm text-[#4a6b50] font-medium">Years Legacy</p>
-                  </div>
-                  <div className="bg-white/90 p-6 rounded-xl text-center">
-                    <Users className="w-12 h-12 text-[#5a7c5e] mx-auto mb-3" />
-                    <p className="text-3xl font-bold text-[#1f3a2e]">100%</p>
-                    <p className="text-sm text-[#4a6b50] font-medium">Organic</p>
-                  </div>
-                  <div className="bg-white/90 p-6 rounded-xl text-center">
-                    <Leaf className="w-12 h-12 text-[#5a7c5e] mx-auto mb-3" />
-                    <p className="text-3xl font-bold text-[#1f3a2e]">A1</p>
-                    <p className="text-sm text-[#4a6b50] font-medium">Grade Quality</p>
-                  </div>
-                  <div className="bg-white/90 p-6 rounded-xl text-center">
-                    <Heart className="w-12 h-12 text-[#5a7c5e] mx-auto mb-3" />
-                    <p className="text-3xl font-bold text-[#1f3a2e]">0</p>
-                    <p className="text-sm text-[#4a6b50] font-medium">Chemicals</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="bg-gradient-to-br from-[#2d4a3e] to-[#1f3a2e] text-white py-20 px-6 md:px-20">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-4xl font-bold mb-12 text-center"
-          >
-            Why Choose <span className="text-[#7a9b5c]">Madhoor Pureline</span>?
-          </motion.h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: Leaf,
-                title: "100% Organic",
-                desc: "Made from premium, locally grown ingredients with zero chemicals."
-              },
-              {
-                icon: Droplet,
-                title: "Cold Press Technology",
-                desc: "Retains nutrients and natural flavors through indirect heating."
-              },
-              {
-                icon: Shield,
-                title: "Eco-Friendly",
-                desc: "Food-grade packaging with quality-controlled manufacturing."
-              },
-              {
-                icon: Target,
-                title: "Zero Water Processing",
-                desc: "We never add water or moisture content during processing."
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.05 }}
-                viewport={{ once: true }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer group"
-              >
-                <div className="bg-[#5a7c5e] w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <item.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-[#7a9b5c]">{item.title}</h3>
-                <p className="text-white/80 leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Mission */}
-      <section className="py-20 px-6 md:px-20 bg-[#e8e0cc]">
-        <div className="max-w-4xl mx-auto text-center">
           <motion.div
+            className="w-full md:w-1/2 relative"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center gap-3 mb-6">
-              <div className="w-12 h-1 bg-[#5a7c5e]"></div>
-              <Target className="w-8 h-8 text-[#5a7c5e]" />
-              <div className="w-12 h-1 bg-[#5a7c5e]"></div>
+            <div className="aspect-square bg-[#1f3a2e] rounded-[3rem] overflow-hidden relative shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
+              <img src="/assets/SugarcaneFarm.webp" alt="Our Farm" className="w-full h-full object-cover opacity-80" />
+              <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent text-white">
+                <p className="font-bold text-xl">Krishna Organic Agro</p>
+                <p className="text-sm opacity-80">Our Roots in Maharashtra</p>
+              </div>
             </div>
-            
-            <h2 className="text-4xl font-bold mb-8 text-[#1f3a2e]">
-              Our Mission
-            </h2>
-            
-            <p className="text-xl leading-relaxed text-[#2d4a3e] mb-8">
-              Our mission is to honor traditional practices while embracing modern innovation
-              to deliver the finest quality products to your table. We believe in sustainable farming,
-              ethical sourcing, and creating products that are as good for the planet as they are for you.
-            </p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="bg-gradient-to-r from-[#5a7c5e] to-[#7a9b5c] text-white p-8 rounded-2xl shadow-xl"
-            >
-              <p className="text-lg italic font-medium">
-                "Bringing nature's purity to your home, one bottle at a time."
-              </p>
-            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 px-6 md:px-20 bg-gradient-to-b from-[#c9c0a8] to-[#bdb298]">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-4xl font-bold mb-12 text-center text-[#1f3a2e]"
-          >
-            Our Core Values
-          </motion.h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* Stats Grid */}
+      <section className="bg-[#1f3a2e] py-20 text-white relative overflow-hidden">
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { icon: Heart, title: "Integrity", desc: "We stand by our promise of 100% natural products" },
-              { icon: Leaf, title: "Sustainability", desc: "Supporting local farmers and eco-friendly practices" },
-              { icon: Award, title: "Excellence", desc: "Uncompromising quality in every product we create" }
-            ].map((value, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.15 }}
-                viewport={{ once: true }}
-                className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center hover:shadow-2xl transition-all duration-300"
-              >
-                <div className="bg-gradient-to-br from-[#5a7c5e] to-[#7a9b5c] w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <value.icon className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-[#1f3a2e]">{value.title}</h3>
-                <p className="text-[#4a6b50] leading-relaxed">{value.desc}</p>
-              </motion.div>
+              { label: "Years Legacy", value: "25+" },
+              { label: "Pure & Organic", value: "100%" },
+              { label: "Chemicals", value: "0%" },
+              { label: "Quality Grade", value: "A1" },
+            ].map((stat, i) => (
+              <div key={i} className="p-6 border border-white/10 rounded-2xl bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors">
+                <h3 className="text-4xl md:text-5xl font-bold text-[#b8d99b] mb-2">{stat.value}</h3>
+                <p className="text-sm uppercase tracking-widest opacity-80">{stat.label}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
-    </main>
-  )
-}
 
-export default page
+      {/* Core Values */}
+      <section className="py-24 px-6 container mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-[#5a7c5e] font-bold tracking-widest uppercase text-sm">Our Philosophy</span>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1f3a2e] mt-2">Why We Do What We Do</h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              icon: Heart,
+              title: "Integrity First",
+              desc: "We never compromise on quality. If it's not pure enough for our family, it's not pure enough for yours.",
+              color: "bg-rose-100 text-rose-600"
+            },
+            {
+              icon: Leaf,
+              title: "Sustainable Future",
+              desc: "We work directly with local farmers, ensuring fair trade and eco-friendly practices that protect our soil.",
+              color: "bg-emerald-100 text-emerald-600"
+            },
+            {
+              icon: Target,
+              title: "Zero Water Sourcing",
+              desc: "Our unique processing ensures zero added moisture, giving you oils with longer shelf life and richer taste.",
+              color: "bg-blue-100 text-blue-600"
+            }
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-[2rem] shadow-xl border border-[#e8e0cc] hover:-translate-y-2 transition-transform duration-300"
+            >
+              <div className={`w-16 h-16 rounded-2xl ${item.color} flex items-center justify-center mb-6`}>
+                <item.icon className="w-8 h-8" />
+              </div>
+              <h3 className="text-2xl font-bold text-[#1f3a2e] mb-4">{item.title}</h3>
+              <p className="text-[#4a6b50] leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 px-6 bg-[#e8e0cc] relative overflow-hidden">
+        <div className="container mx-auto text-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1f3a2e] mb-8">
+            Experience the Purity Yourself
+          </h2>
+          <a href="/products">
+            <button className="bg-[#1f3a2e] text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#5a7c5e] transition-all shadow-xl hover:shadow-2xl inline-flex items-center gap-2 group">
+              Shop Our Products <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </a>
+        </div>
+      </section>
+
+    </main>
+  );
+}
