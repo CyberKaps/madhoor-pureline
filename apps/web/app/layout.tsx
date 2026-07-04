@@ -5,6 +5,7 @@ import Header from "components/Header";
 import Footer from "components/Footer";
 import PreFooterCTA from "components/PreFooterCTA";
 import WhatsAppButton from "components/WhatsAppButton";
+import BackToTop from "components/BackToTop";
 import CustomCursor from "components/CustomCursor";
 import ScrollProgress from "components/ScrollProgress";
 import GrainOverlay from "components/GrainOverlay";
@@ -89,6 +90,7 @@ export default function RootLayout({
           <PreFooterCTA />
           <Footer />
           <WhatsAppButton />
+          <BackToTop />
           <Toaster />
       </body>
     </html>

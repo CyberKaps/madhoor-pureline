@@ -63,9 +63,11 @@ export default function ProductSection() {
           </a>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
           {products.slice(0, 4).map((product, idx) => (
-            <ProductCard key={product.id} {...product} index={idx} />
+            <div key={product.id} className="w-[calc(50%-0.5rem)] sm:w-[260px]">
+              <ProductCard {...product} index={idx} />
+            </div>
           ))}
         </div>
         

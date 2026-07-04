@@ -205,7 +205,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
         {/* Use Case Categories */}
         <div className="border-t border-border/50 pt-16">
-          <h2 className="text-2xl font-bold text-[#2e7d32] mb-8">
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary mb-8">
             Use Case Categories
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">

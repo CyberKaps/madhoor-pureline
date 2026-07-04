@@ -9,6 +9,30 @@ body.hide-native-cursor * {
   cursor: none !important;
 }
 
+/* Themed scrollbar */
+html {
+  scrollbar-color: #916242 #f9eae4; /* thumb, track (Firefox) */
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #f9eae4;
+}
+::-webkit-scrollbar-thumb {
+  background: #916242;
+  border-radius: 9999px;
+  border: 3px solid #f9eae4; /* creates padding, pill look */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7b5034;
+}
+::-webkit-scrollbar-corner {
+  background: #f9eae4;
+}
+
 @theme inline {
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;

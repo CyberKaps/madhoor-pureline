@@ -1,7 +1,7 @@
 import PremierHero from "../components/PremierHero";
 import ProductSection from "../components/Product";
+import PromoCarousel from "../components/PromoCarousel";
 import Philosophy from "../components/Philosophy";
-import FeaturedReviews from "../components/FeaturedReviews";
 import FAQ from "../components/FAQ";
 import Metrics from "../components/Metrics";
 import { Metadata } from "next";
@@ -21,6 +21,7 @@ export default function Home() {
     <main className="min-h-screen">
       <PremierHero />
       <ProductSection />
+      <PromoCarousel />
       <Philosophy />
       <Metrics />
       <FAQ />
