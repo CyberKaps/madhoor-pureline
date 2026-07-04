@@ -105,16 +105,7 @@ const Footer = () => {
           <p className="text-white/40 text-sm md:text-left text-center">
             © 2026 Madhoor Pureline. All rights reserved.
           </p>
-          <div className="flex items-center gap-2">
-            {["UPI", "Visa", "Mastercard", "RuPay"].map((method) => (
-              <span
-                key={method}
-                className="px-2.5 py-1 rounded-md bg-white/10 border border-white/10 text-white/70 text-[11px] font-semibold tracking-wide"
-              >
-                {method}
-              </span>
-            ))}
-          </div>
+          
 
 
           <p className="text-white/40 text-sm flex items-center gap-1">

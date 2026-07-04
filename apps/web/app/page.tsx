@@ -1,3 +1,4 @@
+import HeroBanner from "../components/HeroBanner";
 import PremierHero from "../components/PremierHero";
 import ProductSection from "../components/Product";
 import PromoCarousel from "../components/PromoCarousel";
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <HeroBanner />
       <PremierHero />
       <ProductSection />
       <PromoCarousel />
