@@ -17,9 +17,6 @@ const Footer = () => {
   );
   return (
     <footer className="bg-[#211814] text-white pt-24 pb-12 relative overflow-hidden">
-      {/* Texture Overlay */}
-      <div className="absolute inset-0 bg-[url('/assets/grain.png')] opacity-5 pointer-events-none"></div>
-
       {/* Abstract Background Shapes */}
       <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-primary rounded-full blur-[150px] opacity-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary rounded-full blur-[150px] opacity-10 translate-x-1/2 translate-y-1/2 pointer-events-none"></div>

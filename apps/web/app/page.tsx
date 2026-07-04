@@ -23,7 +23,6 @@ export default function Home() {
       <ProductSection />
       <Philosophy />
       <Metrics />
-      <FeaturedReviews />
       <FAQ />
     </main>
   );
