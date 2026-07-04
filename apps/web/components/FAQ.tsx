@@ -1,75 +1,105 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus, Minus } from "lucide-react";
 
 const faqData = [
   {
     question: "What makes Madhoor Pureline oils different?",
     answer:
-      "Our oils are 100% pure, cold-pressed, and free from chemicals, palm oil, and added water. This ensures maximum nutrition and authentic flavor in every drop.",
-  },
-  {
-    question: "Are your products suitable for children and families?",
-    answer:
-      "Absolutely! Madhoor Pureline products are crafted for wholesome family wellness, using only honest, natural ingredients safe for all ages.",
+      "Our oils are 100% pure, cold-pressed, and free from chemicals, palm oil, and added water. We use a hydraulic pressing method without any heat, which ensures maximum nutrition and authentic regional flavor in every drop.",
   },
   {
     question: "Is your jaggery organic and unrefined?",
     answer:
-      "Yes, our jaggery is traditional, unrefined, and rich in minerals. It is made without chemicals or artificial additives, making it a healthy sweetener.",
+      "Yes! Our jaggery is 100% organic, traditional, and unrefined. We process it using a modern indirect heating system so it doesn't char, and we strictly avoid sulphur bleaching or chemical clarifiers.",
   },
   {
-    question: "How should I store Madhoor Pureline oils?",
+    question: "Are your products suitable for children and families?",
     answer:
-      "Store our oils in a cool, dry place away from direct sunlight to preserve their freshness and nutritional value.",
+      "Absolutely. Madhoor Pureline products are crafted for wholesome family wellness. We believe that if it's not pure enough for our own family, it's not pure enough for yours.",
+  },
+  {
+    question: "How should I store Madhoor Pureline products?",
+    answer:
+      "Store our cold-pressed oils and jaggery in a cool, dry place away from direct sunlight. Because we use no artificial preservatives, keeping them away from excess moisture will preserve their freshness and nutritional value.",
   },
   {
     question: "Can I use your oils for cooking and skincare?",
     answer:
-      "Our oils are versatile and can be used for both cooking and external applications like hair and skin care, thanks to their purity.",
+      "Yes! Because of their absolute purity, our cold-pressed oils are incredibly versatile. They are perfect for heart-healthy cooking, deep frying, as well as external applications like natural hair nourishment and skin care.",
   },
   {
     question: "Are Madhoor Pureline products sustainable?",
     answer:
-      "We are committed to sustainability by using eco-friendly packaging and sourcing ingredients responsibly.",
+      "We are deeply committed to sustainability. We partner directly with local farmers for ethical sourcing, promote chemical-free soil practices, and utilize eco-friendly packaging whenever possible.",
   },
 ];
 
 const FAQ: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0); // Open first one by default
 
   const handleToggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
   };
 
   return (
-    <section className="bg-[#5a7c5e] py-16 px-4">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-center mb-4 text-[#f5fbe9]">Frequently Asked Questions</h2>
-        <p className="text-center text-[#e8e0cc] mb-10">Find answers to common questions about our products and brand.</p>
+    <section className="bg-white py-24 px-4 border-y border-[#ece4dd]">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-[#8c5e3d] font-bold tracking-widest uppercase text-sm">Got Questions?</span>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold mt-4 text-[#444]">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        
         <div className="space-y-4">
-          {faqData.map((faq, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-2xl shadow border border-[#e8e0cc] overflow-hidden"
-            >
-              <button
-                className="w-full flex justify-between items-center px-6 py-5 text-lg font-semibold text-left text-[#1f3a2e] focus:outline-none"
-                onClick={() => handleToggle(idx)}
-                aria-expanded={openIndex === idx}
+          {faqData.map((faq, idx) => {
+            const isOpen = openIndex === idx;
+            
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1, duration: 0.5 }}
+                className={`rounded-2xl border transition-colors duration-300 overflow-hidden ${
+                  isOpen ? "bg-primary/5 border-primary/20" : "bg-white border-[#ece4dd] hover:border-[#8c5e3d]/50"
+                }`}
               >
-                {faq.question}
-                <span className="ml-4 text-[#5a7c5e] text-2xl">
-                  {openIndex === idx ? "▲" : "▼"}
-                </span>
-              </button>
-              {openIndex === idx && (
-                <div className="px-6 pb-5 text-[#4a6b50] text-base animate-fade-in">
-                  {faq.answer}
-                </div>
-              )}
-            </div>
-          ))}
+                <button
+                  className="w-full flex justify-between items-center px-6 md:px-8 py-6 focus:outline-none text-left"
+                  onClick={() => handleToggle(idx)}
+                  aria-expanded={isOpen}
+                >
+                  <span className={`text-lg md:text-xl font-bold pr-8 transition-colors ${isOpen ? "text-primary" : "text-[#444]"}`}>
+                    {faq.question}
+                  </span>
+                  
+                  <div className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? "bg-primary text-white" : "bg-[#ece4dd] text-[#8c5e3d]"}`}>
+                    {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                  </div>
+                </button>
+                
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                      <div className="px-6 md:px-8 pb-6 pt-0 text-[#666] text-lg leading-relaxed">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

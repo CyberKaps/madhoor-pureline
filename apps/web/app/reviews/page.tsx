@@ -81,7 +81,7 @@ const ReviewCard = ({ review, index }: { review: Review, index: number }) => (
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
     viewport={{ once: true }}
-    className="bg-white/60 backdrop-blur-md rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-[#e8e0cc] break-inside-avoid mb-6"
+    className="bg-white/60 backdrop-blur-md rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-border break-inside-avoid mb-6"
   >
     <div className="flex gap-1 mb-4">
       {Array.from({ length: 5 }).map((_, i) => (
@@ -92,16 +92,16 @@ const ReviewCard = ({ review, index }: { review: Review, index: number }) => (
       ))}
     </div>
 
-    <p className="text-[#2d4a3e] text-lg font-light leading-relaxed mb-6 italic">
+    <p className="text-foreground text-lg font-light leading-relaxed mb-6 italic">
       "{review.comment}"
     </p>
 
-    <div className="flex justify-between items-end border-t border-[#2d4a3e]/10 pt-4">
+    <div className="flex justify-between items-end border-t border-foreground/10 pt-4">
       <div>
-        <span className="block font-bold text-[#1f3a2e] text-lg font-serif">{review.name}</span>
-        <span className="text-[#7a9b5c] text-xs font-bold uppercase tracking-wider">Verified Buyer</span>
+        <span className="block font-bold text-foreground text-lg font-serif">{review.name}</span>
+        <span className="text-primary text-xs font-bold uppercase tracking-wider">Verified Buyer</span>
       </div>
-      <span className="text-[#7a9b5c]/60 text-xs">{new Date(review.date).toLocaleDateString()}</span>
+      <span className="text-primary/60 text-xs">{new Date(review.date).toLocaleDateString()}</span>
     </div>
   </motion.div>
 );
@@ -136,9 +136,9 @@ const ReviewsPage = () => {
   };
 
   return (
-    <main className="bg-[#f5fbe9] min-h-screen">
+    <main className="bg-background min-h-screen">
       {/* Header Summary */}
-      <section className="bg-[#1f3a2e] text-white py-24 px-6 rounded-b-[3rem] shadow-2xl relative overflow-hidden">
+      <section className="bg-primary text-white py-24 px-6 rounded-b-[3rem] shadow-2xl relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/assets/grain.png')] opacity-10"></div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.h1
@@ -156,7 +156,7 @@ const ReviewsPage = () => {
             className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 mt-12"
           >
             <div className="text-center">
-              <span className="text-6xl font-bold block mb-2 text-[#b8d99b]">4.9</span>
+              <span className="text-6xl font-bold block mb-2 text-secondary">4.9</span>
               <div className="flex gap-1 justify-center mb-1">
                 {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />)}
               </div>
@@ -166,7 +166,7 @@ const ReviewsPage = () => {
             <div className="h-16 w-[1px] bg-white/20 hidden md:block"></div>
 
             <div className="text-center">
-              <span className="text-6xl font-bold block mb-2 text-[#b8d99b]">2k+</span>
+              <span className="text-6xl font-bold block mb-2 text-secondary">2k+</span>
               <span className="text-sm opacity-80 uppercase tracking-widest font-bold">Happy Families</span>
             </div>
           </motion.div>
@@ -183,26 +183,26 @@ const ReviewsPage = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-[#1f3a2e] text-white font-bold px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-[#5a7c5e] transition-colors"
+                  className="bg-primary text-white font-bold px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-[#7b5034] transition-colors"
                 >
                   <Plus className="w-5 h-5" /> Write a Review
                 </motion.button>
               </DialogTrigger>
 
-              <DialogContent className="sm:max-w-[500px] bg-[#f5fbe9] border border-[#e8e0cc]">
+              <DialogContent className="sm:max-w-[500px] bg-background border border-border">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold text-[#1f3a2e] text-center font-serif">Share Your Experience</DialogTitle>
+                  <DialogTitle className="text-2xl font-bold text-foreground text-center font-serif">Share Your Experience</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                   <div>
-                    <label className="block text-[#4a6b50] font-semibold mb-1 text-sm uppercase tracking-wide">Name</label>
+                    <label className="block text-primary font-semibold mb-1 text-sm uppercase tracking-wide">Name</label>
                     <input
                       type="text"
                       name="name"
                       value={form.name}
                       onChange={handleInput}
-                      className="w-full bg-white border border-[#e8e0cc] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:ring-1 focus:ring-[#5a7c5e] transition-all"
+                      className="w-full bg-white border border-border rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                       maxLength={32}
                       required
                       placeholder="Your name"
@@ -210,7 +210,7 @@ const ReviewsPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[#4a6b50] font-semibold mb-1 text-sm uppercase tracking-wide">Rating</label>
+                    <label className="block text-primary font-semibold mb-1 text-sm uppercase tracking-wide">Rating</label>
                     <div className="flex gap-2">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -226,12 +226,12 @@ const ReviewsPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[#4a6b50] font-semibold mb-1 text-sm uppercase tracking-wide">Comment</label>
+                    <label className="block text-primary font-semibold mb-1 text-sm uppercase tracking-wide">Comment</label>
                     <textarea
                       name="comment"
                       value={form.comment}
                       onChange={handleInput}
-                      className="w-full bg-white border border-[#e8e0cc] rounded-lg px-4 py-3 focus:outline-none focus:border-[#5a7c5e] focus:ring-1 focus:ring-[#5a7c5e] transition-all"
+                      className="w-full bg-white border border-border rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                       rows={4}
                       maxLength={300}
                       required
@@ -244,7 +244,7 @@ const ReviewsPage = () => {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full bg-[#1f3a2e] text-white font-bold py-3 rounded-lg shadow hover:bg-[#5a7c5e] transition-all duration-200"
+                      className="w-full bg-primary text-white font-bold py-3 rounded-lg shadow hover:bg-[#7b5034] transition-all duration-200"
                     >
                       Submit Review
                     </button>

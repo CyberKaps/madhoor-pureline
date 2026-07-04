@@ -5,13 +5,11 @@ import { motion } from "framer-motion";
 import { getProducts } from "../../lib/api";
 import { Product as ApiProduct } from "../../types/product";
 import ProductCard, { ProductCardProps } from "../../components/ProductCard";
-import { Filter, Search } from "lucide-react";
 
 export default function ShopPage() {
   const [products, setProducts] = useState<ProductCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("ALL");
-
 
   const categories = ["ALL", "OILS", "JAGGERY", "COMBOS"];
 
@@ -20,7 +18,6 @@ export default function ShopPage() {
       try {
         const apiProducts: ApiProduct[] = await getProducts();
         const mappedProducts: ProductCardProps[] = apiProducts.map((p, index) => {
-          // Simple logic to guess category from name/desc if not in DB
           let category = "OILS";
           if (p.name.toLowerCase().includes("jaggery")) category = "JAGGERY";
           if (p.name.toLowerCase().includes("combo")) category = "COMBOS";
@@ -29,9 +26,10 @@ export default function ShopPage() {
             id: p.id,
             title: p.name,
             price: `₹${p.price}`,
+            originalPrice: p.originalPrice ? `₹${p.originalPrice}` : undefined,
             image: p.imageUrl || "/assets/productImages/product1.jpeg",
             tags: [category, "PURE"],
-            highlight: index === 0 ? "BESTSELLER" : undefined,
+            highlight: index === 0 ? "SALE" : undefined,
             description: p.description,
             packOptions: [],
             index: index
@@ -53,44 +51,30 @@ export default function ShopPage() {
   });
 
   return (
-    <main className="bg-[#f5fbe9] min-h-screen">
-      {/* Short Hero */}
-      <section className="relative bg-[#1f3a2e] py-32 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/assets/grain.png')] opacity-10"></div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#5a7c5e] rounded-full blur-[100px] opacity-40"></div>
-
-        <div className="container mx-auto relative z-10 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-7xl font-serif font-bold text-white mb-6"
-          >
-            Our Collection
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-[#b8d99b] text-lg md:text-xl max-w-2xl mx-auto"
-          >
-            Curated purity for your wellness journey.
-          </motion.p>
-        </div>
+    <main className="bg-[#faf9f8] min-h-screen">
+      
+      {/* Clean Header */}
+      <section className="pt-32 pb-8 px-6 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#2e7d32] mb-4">
+          All Products
+        </h1>
+        <p className="text-[#444] max-w-2xl mx-auto">
+          Experience the true essence of sweetness and purity with our natural range.
+        </p>
       </section>
 
       {/* Filter Bar */}
-      <section className="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-[#e8e0cc] shadow-sm">
-        <div className="container mx-auto px-6 py-4 flex justify-start md:justify-center overflow-x-auto scrollbar-hide">
-
-          {/* Categories */}
-          <div className="flex gap-2 w-max md:w-auto pb-2 md:pb-0">
+      {/* <section className="sticky top-20 z-40 bg-[#faf9f8]/95 backdrop-blur-md border-b border-t border-[#ece4dd] py-4 shadow-sm">
+        <div className="container mx-auto px-4 flex justify-center overflow-x-auto scrollbar-hide">
+          <div className="flex gap-4 w-max pb-2 md:pb-0 px-2">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-6 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap ${filter === cat
-                  ? "bg-[#1f3a2e] text-white shadow-lg"
-                  : "bg-[#e8e0cc]/50 text-[#5a7c5e] hover:bg-[#e8e0cc]"
+                className={`px-6 py-2 rounded-full text-xs font-bold tracking-widest transition-all whitespace-nowrap border ${
+                  filter === cat
+                  ? "bg-[#8c5e3d] text-white border-[#8c5e3d]"
+                  : "bg-transparent text-[#444] border-[#ece4dd] hover:border-[#8c5e3d]"
                   }`}
               >
                 {cat}
@@ -98,21 +82,23 @@ export default function ShopPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Grid */}
-      <section className="container mx-auto px-6 py-16">
+      <section className="container mx-auto px-4 py-16">
         {loading ? (
-          <div className="text-center py-24 text-lg text-[#5a7c5e]">Cultivating Products...</div>
+          <div className="text-center py-24 text-lg text-[#8c5e3d]">Cultivating Products...</div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex flex-wrap justify-center gap-6">
               {filteredProducts.map((product, idx) => (
-                <ProductCard key={product.id} {...product} index={idx} />
+                <div key={product.id} className="w-full max-w-[320px]">
+                  <ProductCard key={product.id} {...product} index={idx} />
+                </div>
               ))}
             </div>
             {filteredProducts.length === 0 && (
-              <div className="text-center py-20 text-[#4a6b50]">
+              <div className="text-center py-20 text-[#444]">
                 No products found matching your criteria.
               </div>
             )}

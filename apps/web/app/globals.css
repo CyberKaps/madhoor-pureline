@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -39,41 +41,45 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-leaf: var(--leaf);
+  --color-leaf-foreground: var(--leaf-foreground);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.94 0.02 100); /* Warmer beige */
-  --foreground: oklch(0.20 0.03 130); /* Deeper forest green */
-  --card: oklch(0.96 0.015 95); /* Soft cream */
-  --card-foreground: oklch(0.20 0.03 130);
-  --popover: oklch(0.96 0.015 95);
-  --popover-foreground: oklch(0.20 0.03 130);
-  --primary: oklch(0.40 0.10 145); /* Richer sage green */
-  --primary-foreground: oklch(0.98 0.01 100);
-  --secondary: oklch(0.82 0.04 75); /* Deeper beige */
-  --secondary-foreground: oklch(0.20 0.03 130);
-  --muted: oklch(0.88 0.03 90);
-  --muted-foreground: oklch(0.45 0.04 125);
-  --accent: oklch(0.80 0.05 85); /* Richer sage */
-  --accent-foreground: oklch(0.20 0.03 130);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.82 0.03 90);
-  --input: oklch(0.90 0.02 95);
-  --ring: oklch(0.45 0.08 145);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 3.125rem; /* 50px for pill buttons */
+  --background: #fcf4f1;
+  --foreground: #3d2a20;
+  --card: #ffffff;
+  --card-foreground: #3d2a20;
+  --popover: #ffffff;
+  --popover-foreground: #3d2a20;
+  --primary: #916242;
+  --primary-foreground: #ffffff;
+  --leaf: #2e7d32; /* natural / savings accent */
+  --leaf-foreground: #ffffff;
+  --secondary: #f9eae4;
+  --secondary-foreground: #3d2a20;
+  --muted: #f1e4de;
+  --muted-foreground: #7a6358;
+  --accent: #e5ccbf;
+  --accent-foreground: #3d2a20;
+  --destructive: #ef4444;
+  --border: #e5ccbf;
+  --input: #e5ccbf;
+  --ring: #916242;
+  --chart-1: #916242;
+  --chart-2: #b47f5d;
+  --chart-3: #d09c7a;
+  --chart-4: #f1c7ad;
+  --chart-5: #6d462c;
+  --sidebar: #fcf4f1;
+  --sidebar-foreground: #3d2a20;
+  --sidebar-primary: #916242;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f9eae4;
+  --sidebar-accent-foreground: #3d2a20;
+  --sidebar-border: #e5ccbf;
+  --sidebar-ring: #916242;
 }
 
 .dark {

@@ -28,10 +28,10 @@ const featuredReviews = [
 
 export default function FeaturedReviews() {
     return (
-        <section className="py-24 bg-[#1f3a2e] relative overflow-hidden">
+        <section className="py-24 bg-primary relative overflow-hidden">
             {/* Background patterns */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#5a7c5e]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#b8d99b]/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
@@ -46,11 +46,11 @@ export default function FeaturedReviews() {
                             <Star className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />
                             <Star className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />
                             <Star className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />
-                            <span className="text-[#b8d99b] font-medium ml-2">4.9/5 Average Rating</span>
+                            <span className="text-secondary font-medium ml-2">4.9/5 Average Rating</span>
                         </div>
                         <h2 className="text-4xl md:text-5xl font-serif font-bold text-white leading-tight">
                             Loved by <br />
-                            <span className="text-[#b8d99b]">Thousands</span>
+                            <span className="text-secondary">Thousands</span>
                         </h2>
                     </motion.div>
 
@@ -60,7 +60,7 @@ export default function FeaturedReviews() {
                         viewport={{ once: true }}
                     >
                         <Link href="/reviews">
-                            <Button variant="outline" className="rounded-full border-[#5a7c5e] text-[#b8d99b] hover:bg-[#5a7c5e] hover:text-white bg-transparent">
+                            <Button variant="outline" className="rounded-full border-secondary text-secondary hover:bg-secondary hover:text-foreground bg-transparent">
                                 Read All Reviews <ArrowRight className="ml-2 w-4 h-4" />
                             </Button>
                         </Link>
@@ -77,7 +77,7 @@ export default function FeaturedReviews() {
                             viewport={{ once: true }}
                             className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-3xl hover:bg-white/10 transition-colors relative group"
                         >
-                            <Quote className="absolute top-8 right-8 w-10 h-10 text-[#5a7c5e]/20 group-hover:text-[#5a7c5e]/40 transition-colors" />
+                            <Quote className="absolute top-8 right-8 w-10 h-10 text-secondary/20 group-hover:text-secondary/40 transition-colors" />
 
                             <div className="flex gap-1 mb-6">
                                 {Array.from({ length: review.rating }).map((_, i) => (
@@ -90,12 +90,12 @@ export default function FeaturedReviews() {
                             </p>
 
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#5a7c5e] to-[#b8d99b] flex items-center justify-center text-white font-bold">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7b5034] to-[#d09c7a] flex items-center justify-center text-white font-bold">
                                     {review.name.charAt(0)}
                                 </div>
                                 <div>
                                     <h4 className="text-white font-semibold">{review.name}</h4>
-                                    <p className="text-sm text-[#5a7c5e]">{review.role}</p>
+                                    <p className="text-sm text-secondary">{review.role}</p>
                                 </div>
                             </div>
                         </motion.div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { getProducts } from "../lib/api";
 import { Product as ApiProduct } from "../types/product";
 import ProductCard, { ProductCardProps } from "./ProductCard";
@@ -19,12 +18,15 @@ export default function ProductSection() {
           id: p.id,
           title: p.name,
           price: `₹${p.price}`,
+          originalPrice: p.originalPrice ? `₹${p.originalPrice}` : undefined,
           image: p.imageUrl || "/assets/productImages/product1.jpeg",
           tags: ["NATURAL", "PURE"],
-          highlight: index === 0 ? "BESTSELLER" : undefined,
           description: p.description,
           packOptions: [],
-          index: index
+          index: index,
+          inStock: (p as any).inStock,
+          outOfStockMessage: (p as any).outOfStockMessage,
+          ingredients: (p as any).ingredientsText
         }));
         setProducts(mappedProducts);
       } catch (error) {
@@ -38,47 +40,38 @@ export default function ProductSection() {
   }, []);
 
   if (loading) {
-    return <div className="text-center py-24 text-lg text-[#5a7c5e]">Cultivating Products...</div>;
+    return <div className="text-center py-24 text-lg text-primary">Cultivating Products...</div>;
   }
 
   if (products.length === 0) {
-    return <div className="text-center py-24 text-lg text-[#5a7c5e]">Harvesting soon...</div>;
+    return <div className="text-center py-24 text-lg text-primary">Harvesting soon...</div>;
   }
 
   return (
-    <section className="bg-gradient-to-b from-[#dcd6c4] to-[#f5fbe9] py-24 relative overflow-hidden" id="products">
-      <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none"
-        style={{ backgroundImage: "radial-gradient(#5a7c5e 1px, transparent 1px)", backgroundSize: "40px 40px" }}
+    <section className="bg-gradient-to-b from-[#fcf4f1] to-white py-24 relative overflow-hidden" id="products">
+      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
+        style={{ backgroundImage: "radial-gradient(#916242 1px, transparent 1px)", backgroundSize: "40px 40px" }}
       />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h3 className="text-sm font-bold text-[#5a7c5e] tracking-[0.2em] uppercase mb-3">from our farms</h3>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1f3a2e]">Pure Collection</h2>
-          <div className="w-20 h-1 bg-[#b8d99b] mx-auto mt-6 rounded-full" />
-        </motion.div>
+        <div className="flex justify-between items-end mb-8 border-b border-border/50 pb-4">
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-wide">
+            Most Loved by Customers
+          </h2>
+          <a href="/products" className="text-primary font-semibold text-sm hover:underline uppercase tracking-widest hidden sm:block">
+            View all
+          </a>
+        </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {products.slice(0, 3).map((product, idx) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          {products.slice(0, 4).map((product, idx) => (
             <ProductCard key={product.id} {...product} index={idx} />
           ))}
         </div>
-
-        <div className="flex justify-center mt-16">
-          <a href="/products">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-transparent border-2 border-[#5a7c5e] text-[#1f3a2e] font-serif font-bold text-lg rounded-full hover:bg-[#5a7c5e] hover:text-white transition-all shadow-sm hover:shadow-lg flex items-center gap-2"
-            >
-              View All Products
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
-            </motion.button>
+        
+        <div className="mt-6 text-center sm:hidden">
+          <a href="/products" className="text-primary font-semibold text-sm hover:underline uppercase tracking-widest">
+            View all
           </a>
         </div>
       </div>
