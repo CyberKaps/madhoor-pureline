@@ -1,4 +1,3 @@
-import HeroBanner from "../components/HeroBanner";
 import PremierHero from "../components/PremierHero";
 import ProductSection from "../components/Product";
 import PromoCarousel from "../components/PromoCarousel";
@@ -6,6 +5,7 @@ import Philosophy from "../components/Philosophy";
 import FAQ from "../components/FAQ";
 import Metrics from "../components/Metrics";
 import { Metadata } from "next";
+import HeroBanner from "components/HeroBanner";
 
 export const metadata: Metadata = {
   title: "Buy Pure Groundnut Oil & Natural Jaggery Online | Madhoor Pureline",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <HeroBanner />
+      {/* <HeroBanner /> */}
       <PremierHero />
       <ProductSection />
       <PromoCarousel />

@@ -52,9 +52,11 @@ export default function ShopPage() {
           <div className="text-center py-24 text-lg text-primary">Cultivating Products...</div>
         ) : (
           <>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-6xl mx-auto">
               {products.map((product, idx) => (
-                <ProductCard key={product.id} {...product} index={idx} />
+                <div key={product.id} className="w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.333%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-sm">
+                  <ProductCard {...product} index={idx} />
+                </div>
               ))}
             </div>
             {products.length === 0 && (
