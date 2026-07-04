@@ -49,23 +49,23 @@ const slides: Slide[] = [
         accentText: "text-leaf",
         accentChip: "bg-leaf/10 text-leaf",
     },
-    {
-        id: "heritage",
-        eyebrow: "26+ Years of Trust",
-        title: "From Our Farms",
-        highlight: "to Your Kitchen",
-        bullets: ["Farm-direct sourcing", "Chemical-free & pure", "Loved by 1000s of families"],
-        ctaLabel: "Explore Products",
-        ctaHref: "/products",
-        image: { src: "/assets/productImages/family-combo.png", w: 1200, h: 1200 },
-        bg: "bg-gradient-to-br from-[#8a5a38] via-[#7b5034] to-[#3d2a20]",
-        dark: true,
-        accentText: "text-[#f5c578]",
-        accentChip: "bg-white/10 text-[#f5c578]",
-    },
+    // {
+    //     id: "heritage",
+    //     eyebrow: "26+ Years of Trust",
+    //     title: "From Our Farms",
+    //     highlight: "to Your Kitchen",
+    //     bullets: ["Farm-direct sourcing", "Chemical-free & pure", "Loved by 1000s of families"],
+    //     ctaLabel: "Explore Products",
+    //     ctaHref: "/products",
+    //     image: { src: "/assets/productImages/family-combo.png", w: 1200, h: 1200 },
+    //     bg: "bg-gradient-to-br from-[#8a5a38] via-[#7b5034] to-[#3d2a20]",
+    //     dark: true,
+    //     accentText: "text-[#f5c578]",
+    //     accentChip: "bg-white/10 text-[#f5c578]",
+    // },
 ];
 
-const DURATION = 3200;
+const DURATION = 5200;
 
 export default function PromoCarousel() {
     const reduceMotion = useReducedMotion();

@@ -36,7 +36,7 @@ const products = [
     },
 ];
 
-const DURATION = 2800;
+const DURATION = 4800;
 
 export default function PremierHero() {
     const reduceMotion = useReducedMotion();
