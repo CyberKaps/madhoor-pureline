@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { Leaf } from "lucide-react";
 
@@ -19,21 +19,36 @@ export default function PageHero({ badge, title, highlight, subtitle, image }: P
     const [imageOk, setImageOk] = useState(true);
     const showImage = Boolean(image) && imageOk;
 
+    const sectionRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start start", "end start"],
+    });
+    const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+
     return (
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#faf6f2] via-[#f6f0e9] to-[#eef2e5] pt-32 md:pt-36 pb-16 md:pb-20">
+        <section
+            ref={sectionRef}
+            className="relative overflow-hidden bg-gradient-to-br from-[#faf6f2] via-[#f6f0e9] to-[#eef2e5] pt-32 md:pt-36 pb-16 md:pb-20"
+        >
             {/* Background image + cream scrim (only when an image is available) */}
             {showImage && (
                 <>
-                    <Image
-                        src={image!}
-                        alt=""
+                    <motion.div
                         aria-hidden
-                        fill
-                        priority
-                        sizes="100vw"
-                        onError={() => setImageOk(false)}
-                        className="object-cover"
-                    />
+                        style={reduceMotion ? undefined : { y: imageY }}
+                        className="absolute inset-0 -bottom-[20%] scale-105"
+                    >
+                        <Image
+                            src={image!}
+                            alt=""
+                            fill
+                            priority
+                            sizes="100vw"
+                            onError={() => setImageOk(false)}
+                            className="object-cover"
+                        />
+                    </motion.div>
                     <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/70 to-background/90" />
                 </>
             )}

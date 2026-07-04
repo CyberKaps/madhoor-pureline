@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Menu, X, User } from "lucide-react";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
@@ -19,9 +19,6 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
-
-  // Pages with dark hero sections where header text should be white initially
-  const isDarkHero = ["/", "/products", "/about"].includes(pathname);
 
   // Dynamic header styles based on scroll
   const headerBackground = useTransform(

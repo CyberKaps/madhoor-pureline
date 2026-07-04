@@ -3,7 +3,11 @@ import { Montserrat, Fraunces } from "next/font/google";
 import "./globals.css";
 import Header from "components/Header";
 import Footer from "components/Footer";
+import PreFooterCTA from "components/PreFooterCTA";
 import WhatsAppButton from "components/WhatsAppButton";
+import CustomCursor from "components/CustomCursor";
+import ScrollProgress from "components/ScrollProgress";
+import GrainOverlay from "components/GrainOverlay";
 
 import { Toaster } from "sonner";
 
@@ -77,8 +81,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.variable} ${fraunces.variable} font-sans`}>
+          <GrainOverlay />
+          <ScrollProgress />
+          <CustomCursor />
           <Header />
           <main className="flex-1">{children}</main>
+          <PreFooterCTA />
           <Footer />
           <WhatsAppButton />
           <Toaster />

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Leaf, Heart, Shield, Target, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +9,14 @@ import Philosophy from "../../components/Philosophy";
 import PageHero from "../../components/PageHero";
 
 export default function AboutPage() {
+  const reduceMotion = useReducedMotion();
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: bannerRef,
+    offset: ["start end", "end start"],
+  });
+  const bannerY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+
   return (
     <main className="bg-background min-h-screen text-foreground overflow-hidden">
 
@@ -22,6 +31,7 @@ export default function AboutPage() {
       {/* Feature Banner */}
       <section className="relative px-4 pt-12 md:pt-16 pb-8 max-w-7xl mx-auto">
         <motion.div
+          ref={bannerRef}
           className="w-full aspect-[21/9] md:aspect-[21/7] bg-muted rounded-[2rem] md:rounded-[3rem] overflow-hidden relative shadow-sm"
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -29,13 +39,18 @@ export default function AboutPage() {
           transition={{ duration: 0.8 }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-primary/25 to-transparent z-10" />
-          <Image
-            src="/assets/SugarcaneFarm.webp"
-            alt="Madhoor Pureline Farms"
-            fill
-            priority
-            className="object-cover opacity-90 blur-[3px] scale-105"
-          />
+          <motion.div
+            style={reduceMotion ? undefined : { y: bannerY }}
+            className="absolute -inset-y-[10%] inset-x-0"
+          >
+            <Image
+              src="/assets/SugarcaneFarm.webp"
+              alt="Madhoor Pureline Farms"
+              fill
+              priority
+              className="object-cover opacity-90 blur-[3px] scale-110"
+            />
+          </motion.div>
           <div className="absolute inset-0 z-20 flex items-center justify-center">
             <div className="bg-white/90 backdrop-blur-sm px-8 py-4 md:px-12 md:py-6 rounded-full border border-leaf/20 shadow-xl">
               <p className="text-2xl md:text-4xl font-serif font-bold text-leaf tracking-wide">

@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Leaf, ShieldCheck, Droplets, ArrowRight, Star, ChevronDown } from "lucide-react";
+import { Leaf, ShieldCheck, Droplets, ArrowRight, Star } from "lucide-react";
 
 const trustMarkers = [
     { icon: Leaf, label: "100% Pure & Natural" },
@@ -95,8 +95,34 @@ export default function PremierHero() {
         setPaused(false);
     };
 
+    // ─── Cursor-reactive glow (follows mouse across the whole hero) ───
+    const glowX = useMotionValue(-500);
+    const glowY = useMotionValue(-500);
+    const gx = useSpring(glowX, { stiffness: 120, damping: 25, mass: 0.6 });
+    const gy = useSpring(glowY, { stiffness: 120, damping: 25, mass: 0.6 });
+
+    const handleSectionMove = (e: React.MouseEvent<HTMLElement>) => {
+        if (reduceMotion) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        glowX.set(e.clientX - r.left);
+        glowY.set(e.clientY - r.top);
+    };
+
     return (
-        <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#faf6f2] via-[#f6f0e9] to-[#eef2e5]">
+        <section
+            onMouseMove={handleSectionMove}
+            className="relative w-full overflow-hidden bg-gradient-to-br from-[#faf6f2] via-[#f6f0e9] to-[#eef2e5]"
+        >
+            {/* Cursor-reactive warm glow */}
+            {!reduceMotion && (
+                <motion.div aria-hidden style={{ x: gx, y: gy }} className="pointer-events-none absolute left-0 top-0 z-0">
+                    <div
+                        className="-translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full blur-3xl"
+                        style={{ background: "radial-gradient(circle, rgba(145,98,66,0.12), transparent 60%)" }}
+                    />
+                </motion.div>
+            )}
+
             {/* Animated ambient blobs */}
             <motion.div
                 aria-hidden
@@ -308,23 +334,6 @@ export default function PremierHero() {
                     </motion.div>
                 </div>
 
-                {/* Scroll cue */}
-                <motion.a
-                    href="#products"
-                    aria-label="Scroll to products"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.1, duration: 0.6 }}
-                    className="hidden md:flex absolute left-1/2 -translate-x-1/2 bottom-4 flex-col items-center gap-1 text-primary/60 hover:text-primary transition-colors"
-                >
-                    <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">Scroll</span>
-                    <motion.span
-                        animate={reduceMotion ? undefined : { y: [0, 6, 0] }}
-                        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                        <ChevronDown className="w-5 h-5" />
-                    </motion.span>
-                </motion.a>
             </div>
         </section>
     );

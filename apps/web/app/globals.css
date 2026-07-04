@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Custom cursor: hide the native pointer when the custom cursor is active */
+body.hide-native-cursor,
+body.hide-native-cursor * {
+  cursor: none !important;
+}
+
 @theme inline {
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
