@@ -8,6 +8,9 @@ import cartRoutes from './routes/cart.route';
 import paymentRoutes from './routes/payment.route';
 import orderRoutes from './routes/order.route';
 import adminOrderRoutes from './routes/admin.order.route';
+import categoryRoutes from './routes/category.route';
+import couponRoutes from './routes/coupon.route';
+import uploadRoutes from './routes/upload.route';
 import bodyParser from 'body-parser'
 import { razorpayWebhook } from './controllers/webhook.controller';
 
@@ -41,6 +44,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/admin', adminOrderRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/upload', uploadRoutes);
 
 
 app.listen(PORT, () => {

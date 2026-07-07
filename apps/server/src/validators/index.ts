@@ -34,3 +34,20 @@ export const createOrderSchema = z.object({
     couponCode: z.string().optional(),
   }),
 });
+
+export const createCategorySchema = z.object({
+  body: z.object({
+    name: z.string().min(1, "Name is required"),
+    description: z.string().optional(),
+  }),
+});
+
+export const createCouponSchema = z.object({
+  body: z.object({
+    code: z.string().min(3, "Code must be at least 3 characters"),
+    discountPercentage: z.number().min(0).max(100),
+    maxDiscountAmount: z.number().min(0).optional(),
+    minOrderAmount: z.number().min(0).optional(),
+    validUntil: z.string().datetime().optional(),
+  }),
+});
