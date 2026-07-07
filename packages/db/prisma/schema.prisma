@@ -51,6 +51,7 @@ model Product {
   imageUrl      String?
   stockQuantity Int      @default(0)
   categoryId    String?
+  metadata      Json?
   category      Category? @relation(fields: [categoryId], references: [id])
 
   cartItems     CartItem[]

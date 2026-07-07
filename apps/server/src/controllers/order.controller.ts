@@ -7,8 +7,7 @@ import { prismaClient } from "@repo/db/client";
 export const createOrder = async (req: Request, res:Response) => {
     try {
         const userId = req.user.id;
-        const { street, city, pincode, paymentMode = "COD", couponCode } = req.body
-
+        const { street, city, pincode, paymentMode = "COD", couponCode, items } = req.body
 
         if (!street || !city || !pincode) {
             return res.status(400).json({
@@ -21,27 +20,47 @@ export const createOrder = async (req: Request, res:Response) => {
             return res.status(400).json({ message: "Invalid pincode" });
         }
 
-        const cart = await getCartOrThrow(userId);
-
-        if (cart.items.length === 0) {
+        if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({
                 success: false,
                 message: "Cart is empty",
             });
         }
 
-        // check stock availability
-        for (const item of cart.items) {
-            if (item.quantity > item.product.stockQuantity) {
+        // Fetch products from DB to validate prices and stock
+        const productIds = items.map((item: any) => item.productId);
+        const products = await prismaClient.product.findMany({
+            where: { id: { in: productIds } }
+        });
+
+        const productMap = new Map(products.map(p => [p.id, p]));
+
+        // check stock availability and construct verified items array
+        const verifiedItems: any[] = [];
+        for (const item of items) {
+            const product = productMap.get(item.productId);
+            if (!product) {
                 return res.status(400).json({
                     success: false,
-                    message: `Product ${item.product.name} is out of stock or requested quantity exceeds available stock.`,
+                    message: `Product with ID ${item.productId} not found.`,
                 });
             }
+            if (item.quantity > product.stockQuantity) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Product ${product.name} is out of stock or requested quantity exceeds available stock.`,
+                });
+            }
+            verifiedItems.push({
+                productId: product.id,
+                price: product.price,
+                quantity: item.quantity,
+                name: product.name
+            });
         }
 
         // calculate total
-        let subTotalAmount = cart.items.reduce( (sum: number, item: any) => sum + item.product.price * item.quantity, 0 )
+        let subTotalAmount = verifiedItems.reduce( (sum: number, item: any) => sum + item.price * item.quantity, 0 )
         let discountAmount = 0;
         let couponId = null;
 
@@ -90,7 +109,7 @@ export const createOrder = async (req: Request, res:Response) => {
             });
 
             // update stock and create order item
-            for (const item of cart.items) {
+            for (const item of verifiedItems) {
                 await tx.product.update({
                     where: { id: item.productId },
                     data: { stockQuantity: { decrement: item.quantity } }
@@ -98,18 +117,25 @@ export const createOrder = async (req: Request, res:Response) => {
             }
 
             await tx.orderItem.createMany({
-                data: cart.items.map((item: any) => ({
+                data: verifiedItems.map((item: any) => ({
                     orderId: newOrder.id,
                     productId: item.productId,
-                    price: item.product.price,
+                    price: item.price,
                     quantity: item.quantity
                 })),
             });
 
-            // clear cart
-            await tx.cartItem.deleteMany({
-                where: { cartId: cart.id}
-            })
+            // clear cart if it exists (ignoring errors if not)
+            try {
+                const cart = await tx.cart.findUnique({ where: { userId } });
+                if (cart) {
+                    await tx.cartItem.deleteMany({
+                        where: { cartId: cart.id}
+                    });
+                }
+            } catch(e) {
+                // Ignore missing cart
+            }
 
             return newOrder;
         })

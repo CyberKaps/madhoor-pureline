@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useAppDispatch } from "../store/store";
+import { addToCart } from "../store/cartSlice";
+import { ShoppingBag } from "lucide-react";
 
 export type ProductCardProps = {
     id: string;
@@ -35,6 +38,14 @@ export default function ProductCard({
     inStock,
     outOfStockMessage,
 }: ProductCardProps) {
+    const dispatch = useAppDispatch();
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        dispatch(addToCart({
+            id, title, price, originalPrice, image, tags, highlight, description, ingredients, packOptions, index, inStock, outOfStockMessage
+        }));
+    };
 
     return (
         <motion.div
@@ -101,13 +112,23 @@ export default function ProductCard({
                     </div>
                 </div>
 
-                <Link href={`/products/${id}`} passHref className="w-full mt-auto">
+                <div className="w-full mt-auto flex gap-2">
+                    <Link href={`/products/${id}`} passHref className="flex-1">
+                        <Button
+                            variant="outline"
+                            className="w-full rounded-[0.4rem] h-10 border-primary text-primary hover:bg-primary/5 font-medium text-sm transition-colors shadow-none"
+                        >
+                            View
+                        </Button>
+                    </Link>
                     <Button
-                        className="w-full rounded-[0.4rem] h-10 bg-primary hover:bg-[#7b5034] text-primary-foreground font-medium text-sm transition-colors shadow-none"
+                        onClick={handleAddToCart}
+                        className="flex-1 rounded-[0.4rem] h-10 bg-primary hover:bg-[#7b5034] text-primary-foreground font-medium text-sm transition-colors shadow-none flex items-center gap-2"
                     >
-                        View details
+                        <ShoppingBag className="w-4 h-4" />
+                        Add
                     </Button>
-                </Link>
+                </div>
             </div>
         </motion.div>
     );

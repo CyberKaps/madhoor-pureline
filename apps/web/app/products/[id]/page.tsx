@@ -4,6 +4,7 @@ import { Accordion } from "components/ui/accordion";
 import { Metadata } from "next";
 import Link from "next/link";
 import ProductImageGallery from "components/ProductImageGallery";
+import AddToCartButton from "components/AddToCartButton";
 
 // Generate metadata for the product page
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export async function generateStaticParams() {
   const products = await getProducts();
-  return products.map((product) => ({
+  return products.map((product: any) => ({
     id: product.id,
   }));
 }
@@ -175,16 +176,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 )}
               </div>
             ) : (
-              <a
-                href={`https://wa.me/919834452105?text=${encodeURIComponent('I am interested in buying ' + product.name)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mb-12 block"
-              >
-                <Button className="w-full md:w-auto px-12 py-6 rounded-[0.4rem] bg-[#8c5e3d] hover:bg-[#724a2e] text-white font-medium text-lg shadow-md transition-all">
-                  Buy on WhatsApp
-                </Button>
-              </a>
+              <div className="mb-12 block">
+                <AddToCartButton product={product} />
+              </div>
             )}
 
             {/* Rich Description */}

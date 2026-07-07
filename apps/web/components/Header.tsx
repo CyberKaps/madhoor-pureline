@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag, User, LogOut, Package } from "lucide-react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { toggleCart } from "../store/cartSlice";
+import { toggleAuthModal, logout } from "../store/authSlice";
+import AuthModal from "./AuthModal";
+import CartSheet from "./CartSheet";
 
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/utils";
@@ -19,6 +24,9 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const cartItemsCount = useAppSelector((state) => state.cart.items.reduce((acc, item) => acc + item.quantity, 0));
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   // Dynamic header styles based on scroll
   const headerBackground = useTransform(
@@ -112,20 +120,73 @@ export default function Header() {
               style={{ backgroundColor: textColor }}
               className="h-6 w-[1px] opacity-20"
             ></motion.div>
+            
+            <button 
+              onClick={() => dispatch(toggleCart())}
+              className="relative p-2 text-[#444] hover:text-primary transition-colors"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {cartItemsCount > 0 && (
+                <span className="absolute top-0 right-0 bg-[#f39c12] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {cartItemsCount}
+                </span>
+              )}
+            </button>
+
+            {isAuthenticated ? (
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-medium text-[#444]">Hi, {user?.name?.split(' ')[0]}</span>
+                <Link href="/orders" className="p-2 text-[#444] hover:text-primary transition-colors" title="My Orders">
+                  <Package className="w-5 h-5" />
+                </Link>
+                <button 
+                  onClick={() => {
+                    dispatch(logout());
+                    localStorage.removeItem("token");
+                  }}
+                  className="p-2 text-[#444] hover:text-primary transition-colors"
+                  title="Logout"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => dispatch(toggleAuthModal(true))}
+                className="flex items-center gap-2 p-2 text-[#444] hover:text-primary transition-colors font-medium text-sm"
+              >
+                <User className="w-5 h-5" />
+                Login
+              </button>
+            )}
+            
             <Link href="/contact">
               <button className="px-5 py-2 text-sm font-medium text-white bg-primary rounded-full hover:bg-[#7b5034] transition-all shadow-sm hover:shadow-md hover:scale-105">
-                Get in Touch
+                Contact
               </button>
             </Link>
           </div>
 
-          <button
-            className="md:hidden p-2 rounded-full transition-colors"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="w-6 h-6 text-primary" />
-          </button>
+          <div className="md:hidden flex items-center gap-4">
+            <button 
+              onClick={() => dispatch(toggleCart())}
+              className="relative p-2 text-[#444]"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {cartItemsCount > 0 && (
+                <span className="absolute top-0 right-0 bg-[#f39c12] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {cartItemsCount}
+                </span>
+              )}
+            </button>
+            <button
+              className="p-2 rounded-full transition-colors"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6 text-primary" />
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -177,10 +238,37 @@ export default function Header() {
                 ))}
               </nav>
 
-              <div className="mt-auto space-y-6">
-                <Link href="/contact" className="w-full" onClick={() => setMobileOpen(false)}>
-                  <button className="w-full px-5 py-2 text-sm font-medium text-white bg-primary rounded-full hover:bg-[#7b5034] transition-all shadow-sm hover:shadow-md hover:scale-105">
-                    Get in Touch
+              <div className="mt-auto space-y-4">
+                {isAuthenticated ? (
+                  <div className="flex items-center justify-between border-t border-foreground/5 pt-4">
+                    <span className="font-medium text-foreground">Hi, {user?.name}</span>
+                    <button 
+                      onClick={() => {
+                        dispatch(logout());
+                        localStorage.removeItem("token");
+                        setMobileOpen(false);
+                      }}
+                      className="text-sm text-red-500 font-bold"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      dispatch(toggleAuthModal(true));
+                      setMobileOpen(false);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium border border-primary text-primary rounded-full hover:bg-primary/5 transition-all"
+                  >
+                    <User className="w-5 h-5" />
+                    Login / Sign Up
+                  </button>
+                )}
+                
+                <Link href="/contact" className="w-full block" onClick={() => setMobileOpen(false)}>
+                  <button className="w-full px-5 py-3 text-sm font-medium text-white bg-primary rounded-full hover:bg-[#7b5034] transition-all shadow-sm">
+                    Contact Us
                   </button>
                 </Link>
               </div>
@@ -188,6 +276,8 @@ export default function Header() {
           </>
         )}
       </AnimatePresence>
+      <AuthModal />
+      <CartSheet />
     </>
   );
 }

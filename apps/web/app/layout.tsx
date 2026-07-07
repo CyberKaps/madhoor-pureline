@@ -11,6 +11,7 @@ import ScrollProgress from "components/ScrollProgress";
 import GrainOverlay from "components/GrainOverlay";
 
 import { Toaster } from "sonner";
+import { StoreProvider } from "../store/StoreProvider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -82,6 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.variable} ${fraunces.variable} font-sans`}>
+        <StoreProvider>
           <GrainOverlay />
           <ScrollProgress />
           <CustomCursor />
@@ -92,6 +94,7 @@ export default function RootLayout({
           <WhatsAppButton />
           <BackToTop />
           <Toaster />
+        </StoreProvider>
       </body>
     </html>
   );
