@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { prismaClient } from "@repo/db/client";
-import { Prisma } from "@prisma/client";
+import { prismaClient, Prisma } from "@repo/db/client";
 
 
 // public controllers
@@ -58,7 +57,7 @@ export const getOneProduct = async (req: Request, res: Response) => {
 // admin controllers
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, description, price, imageUrl } = req.body;
+    const { name, description, price, imageUrl, stockQuantity, categoryId } = req.body;
 
     if (!name || !description || price === undefined) {
       return res.status(400).json({
@@ -81,6 +80,8 @@ export const createProduct = async (req: Request, res: Response) => {
         description,
         price: parsedPrice,
         imageUrl,
+        stockQuantity: stockQuantity || 0,
+        categoryId: categoryId || null,
       },
     });
 
@@ -101,13 +102,15 @@ export const createProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, description, price, imageUrl } = req.body;
+    const { name, description, price, imageUrl, stockQuantity, categoryId } = req.body;
 
     const updateData: Prisma.ProductUpdateInput = {};
 
     if (name !== undefined) updateData.name = name;
     if (description !== undefined) updateData.description = description;
     if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
+    if (stockQuantity !== undefined) updateData.stockQuantity = stockQuantity;
+    if (categoryId !== undefined) updateData.category = { connect: { id: categoryId } };
 
     if (price !== undefined) {
       const parsedPrice = Number(price);
@@ -133,8 +136,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     console.error(error);
 
     if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2025"
+      (error as any).code === "P2025"
     ) {
       return res.status(404).json({
         success: false,
@@ -166,8 +168,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     console.error(error);
 
     if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2025"
+      (error as any).code === "P2025"
     ) {
       return res.status(404).json({
         success: false,

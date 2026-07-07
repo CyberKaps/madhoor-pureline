@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { prismaClient } from "@repo/db/client";
-import { OrderStatus } from "@prisma/client";
+import { prismaClient, OrderStatus } from "@repo/db/client";
 
 
 export const getAllOrders = async (req: Request, res: Response) => {

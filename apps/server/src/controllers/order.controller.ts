@@ -7,7 +7,7 @@ import { prismaClient } from "@repo/db/client";
 export const createOrder = async (req: Request, res:Response) => {
     try {
         const userId = req.user.id;
-        const { street, city, pincode, paymentMode = "COD" } = req.body
+        const { street, city, pincode, paymentMode = "COD", couponCode } = req.body
 
 
         if (!street || !city || !pincode) {
@@ -30,12 +30,43 @@ export const createOrder = async (req: Request, res:Response) => {
             });
         }
 
-        // calculate total
-        const totalAmount = cart.items.reduce( (sum, item) => sum + item.product.price * item.quantity, 0 )
+        // check stock availability
+        for (const item of cart.items) {
+            if (item.quantity > item.product.stockQuantity) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Product ${item.product.name} is out of stock or requested quantity exceeds available stock.`,
+                });
+            }
+        }
 
-        const order = await prismaClient.$transaction(async (tx) => {
+        // calculate total
+        let subTotalAmount = cart.items.reduce( (sum: number, item: any) => sum + item.product.price * item.quantity, 0 )
+        let discountAmount = 0;
+        let couponId = null;
+
+        if (couponCode) {
+            const coupon = await prismaClient.coupon.findUnique({ where: { code: couponCode } });
+            if (!coupon || !coupon.isActive || (coupon.validUntil && coupon.validUntil < new Date())) {
+                return res.status(400).json({ success: false, message: "Invalid or expired coupon" });
+            }
+            if (coupon.minOrderAmount && subTotalAmount < coupon.minOrderAmount) {
+                return res.status(400).json({ success: false, message: `Minimum order amount for this coupon is ${coupon.minOrderAmount}` });
+            }
+            
+            discountAmount = (subTotalAmount * coupon.discountPercentage) / 100;
+            if (coupon.maxDiscountAmount && discountAmount > coupon.maxDiscountAmount) {
+                discountAmount = coupon.maxDiscountAmount;
+            }
+            couponId = coupon.id;
+        }
+
+        const shippingAmount = subTotalAmount > 500 ? 0 : 50; // free shipping above 500
+        const totalAmount = subTotalAmount - discountAmount + shippingAmount;
+
+        const order = await prismaClient.$transaction(async (tx: any) => {
             // create shipping address
-            const address = await tx.shippingAddress.create({
+            const address = await tx.address.create({
                 data: {
                     street,
                     city,
@@ -47,16 +78,27 @@ export const createOrder = async (req: Request, res:Response) => {
             const newOrder = await tx.order.create({
                 data: {
                     userId,
+                    subTotalAmount,
+                    discountAmount,
+                    shippingAmount,
                     totalAmount,
                     paymentMode,
                     status: "PENDING",
-                    shippingAddressId: address.id
+                    shippingAddressId: address.id,
+                    ...(couponId ? { couponId } : {})
                 }
             });
 
-            // create order item
+            // update stock and create order item
+            for (const item of cart.items) {
+                await tx.product.update({
+                    where: { id: item.productId },
+                    data: { stockQuantity: { decrement: item.quantity } }
+                });
+            }
+
             await tx.orderItem.createMany({
-                data: cart.items.map((item) => ({
+                data: cart.items.map((item: any) => ({
                     orderId: newOrder.id,
                     productId: item.productId,
                     price: item.product.price,

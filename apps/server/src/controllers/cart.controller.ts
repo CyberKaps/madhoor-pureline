@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { prismaClient } from "@repo/db/client";
+import { prismaClient, Prisma } from "@repo/db/client";
 import { CartNotFoundError, getCartOrThrow, getCartWithItems, getOrCreateCart } from '../services/cart.service';
-import { Prisma } from "@prisma/client"
 
 export const getCart = async (req: Request, res: Response) => {
     try {
@@ -153,7 +152,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
             });
         }
 
-        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+        if (e instanceof Prisma.PrismaClientKnownRequestError && (e as any).code === "P2025") {
             return res.status(404).json({
                 success: false,
                 message: "Item not found in cart",
@@ -216,7 +215,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
         }
 
         // Item not found in cart
-        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+        if (e instanceof Prisma.PrismaClientKnownRequestError && (e as any).code === "P2025") {
             return res.status(404).json({
                 success: false,
                 message: "Item not found in cart",
