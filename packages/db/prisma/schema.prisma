@@ -18,8 +18,10 @@ model User {
   updatedAt DateTime @updatedAt
   email     String   @unique
   password  String
-  name      String?
-  role      Role     @default(USER)
+  name                 String?
+  role                 Role      @default(USER)
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
 
   cart      Cart?
   orders    Order[]

@@ -2,6 +2,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import helmet from 'helmet';
 import authRoutes from './routes/auth.route';
 import productRoutes from './routes/product.route';
 import cartRoutes from './routes/cart.route';
@@ -25,6 +26,8 @@ app.use(cors({
   origin: ["http://localhost:3000"],
   credentials: true
 }));
+
+app.use(helmet());
 
 app.post("/api/payment/razorpay/webhook", bodyParser.raw({ type: "application/json" }), razorpayWebhook);
 
